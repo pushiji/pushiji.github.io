@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="以码云为例，介绍如何将本地仓库上传至远程仓库。共有6个步骤。 主要代码如下： 123456git initgit add .git commit -m &quot;commit message&quot;git remote add origin https:&#x2F;&#x2F;gitee&#x2F;com&#x2F;useName&#x2F;repositoryName.gitgit pull --rebase origin masterg">
+    <meta name="description" content="以码云为例，介绍如何将本地仓库上传至远程仓库。共有6个步骤。 主要代码如下： 123456git initgit add .git commit -m &quot;commit message&quot;git remote add origin https:&#x2F;&#x2F;gitee&#x2F;com&#x2F;useName&#x2F;repositoryName.gitgit pull --rebase origin maste">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git教程-把本地仓库推送至远程仓库">
 <meta property="og:url" content="http://example.com/2020/03/14/Git%E6%95%99%E7%A8%8B-%E6%8A%8A%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%8E%A8%E9%80%81%E8%87%B3%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/index.html">
 <meta property="og:site_name" content="吉度奇点">
-<meta property="og:description" content="以码云为例，介绍如何将本地仓库上传至远程仓库。共有6个步骤。 主要代码如下： 123456git initgit add .git commit -m &quot;commit message&quot;git remote add origin https:&#x2F;&#x2F;gitee&#x2F;com&#x2F;useName&#x2F;repositoryName.gitgit pull --rebase origin masterg">
+<meta property="og:description" content="以码云为例，介绍如何将本地仓库上传至远程仓库。共有6个步骤。 主要代码如下： 123456git initgit add .git commit -m &quot;commit message&quot;git remote add origin https:&#x2F;&#x2F;gitee&#x2F;com&#x2F;useName&#x2F;repositoryName.gitgit pull --rebase origin maste">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-14T07:59:04.000Z">
 <meta property="article:modified_time" content="2020-03-19T08:24:09.934Z">
@@ -64,6 +64,12 @@
   
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
 
 
 
@@ -156,7 +162,11 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-init-folder"><span class="nav-number">1.</span> <span class="nav-text">git init [folder]</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-add"><span class="nav-number">2.</span> <span class="nav-text">Git add</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add"><span class="nav-number">2.1.</span> <span class="nav-text">git add .</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add-u-%EF%BC%88git-add-%E2%80%93update-%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">git add -u .（git add –update .）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add-A-%EF%BC%88git-add-%E2%80%93all-%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">git add -A .（git add –all .）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="nav-number">2.3.1.</span> <span class="nav-text">总结：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-commit"><span class="nav-number">3.</span> <span class="nav-text">Git commit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-commit-m-%E2%80%98message%E2%80%99"><span class="nav-number">3.1.</span> <span class="nav-text">git commit -m ‘message’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-commit-am-%E2%80%98message%E2%80%99-am%E7%AD%89%E5%90%8C%E4%BA%8E-a-m"><span class="nav-number">3.2.</span> <span class="nav-text">git commit -am ‘message’ -am等同于-a -m</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-remote-add-origin-https-Address"><span class="nav-number">4.</span> <span class="nav-text">git remote add origin https_Address</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-pull-%E2%80%93rebase-origin-master"><span class="nav-number">5.</span> <span class="nav-text">git pull –rebase origin master</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push"><span class="nav-number">6.</span> <span class="nav-text">git push</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin-master"><span class="nav-number">6.1.</span> <span class="nav-text">git push origin master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin-refs-for-master"><span class="nav-number">6.2.</span> <span class="nav-text">git push origin:refs&#x2F;for&#x2F;master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin"><span class="nav-number">6.3.</span> <span class="nav-text">git push origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-1"><span class="nav-number">6.4.</span> <span class="nav-text">git push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-u-origin-master"><span class="nav-number">6.5.</span> <span class="nav-text">git push -u origin master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-%E2%80%93all-origin"><span class="nav-number">6.6.</span> <span class="nav-text">git push –all origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-%E2%80%93force-origin"><span class="nav-number">6.7.</span> <span class="nav-text">git push –force origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin-%E2%80%93tags"><span class="nav-number">6.8.</span> <span class="nav-text">git push origin –tags</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-init-folder"><span class="nav-number">1.</span> <span class="nav-text">git init [folder]</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-add"><span class="nav-number">2.</span> <span class="nav-text">Git add</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add-."><span class="nav-number">2.1.</span> <span class="nav-text">git add .</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add--u-.git-add-update-."><span class="nav-number">2.2.</span> <span class="nav-text">git add -u .（git add –update
+.）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-add--a-.git-add-all-."><span class="nav-number">2.3.</span> <span class="nav-text">git add -A .（git add –all .）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.3.1.</span> <span class="nav-text">总结：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-commit"><span class="nav-number">3.</span> <span class="nav-text">Git commit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-commit--m-message"><span class="nav-number">3.1.</span> <span class="nav-text">git commit -m ‘message’</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-remote-add-origin-https_address"><span class="nav-number">4.</span> <span class="nav-text">git remote add origin
+https_Address</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-pull-rebase-origin-master"><span class="nav-number">5.</span> <span class="nav-text">git pull –rebase origin
+master</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push"><span class="nav-number">6.</span> <span class="nav-text">git push</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin-master"><span class="nav-number">6.1.</span> <span class="nav-text">git push origin master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-originrefsformaster"><span class="nav-number">6.2.</span> <span class="nav-text">git push
+origin:refs&#x2F;for&#x2F;master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin"><span class="nav-number">6.3.</span> <span class="nav-text">git push origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-1"><span class="nav-number">6.4.</span> <span class="nav-text">git push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push--u-origin-master"><span class="nav-number">6.5.</span> <span class="nav-text">git push -u origin master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-all-origin"><span class="nav-number">6.6.</span> <span class="nav-text">git push –all origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-force-origin"><span class="nav-number">6.7.</span> <span class="nav-text">git push –force origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push-origin-tags"><span class="nav-number">6.8.</span> <span class="nav-text">git push origin –tags</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,18 +181,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -278,52 +288,88 @@
 <p>主要代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;commit message&quot;</span><br><span class="line">git remote add origin https://gitee/com/useName/repositoryName.git</span><br><span class="line">git pull --rebase origin master</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
 <span id="more"></span>
-
 <p>以下为详细内容：</p>
 <ul>
-<li><h1 id="git-init-folder"><a href="#git-init-folder" class="headerlink" title="git init [folder]"></a>git init [folder]</h1></li>
+<li><h1 id="git-init-folder">git init [folder]</h1></li>
 </ul>
 <p>初始化本地仓库，命令行目录切换至本地仓库目录后运行<code>git init</code>,或在后面添加本地仓库目录。</p>
 <ul>
-<li><h1 id="Git-add"><a href="#Git-add" class="headerlink" title="Git add"></a>Git add</h1></li>
+<li><h1 id="git-add">Git add</h1></li>
 </ul>
-<p>git add [参数]&lt;路径&gt;作用就是将我们需要提交的代码从工作区添加到暂存区，就是告诉git系统，我们要提交哪些文件，之后就可以使用git commit命令进行提交了。</p>
-<h2 id="git-add"><a href="#git-add" class="headerlink" title="git add ."></a>git add .</h2><p>“.”表示当前目录，可以修改。监控工作区的状态树，使用它会把工作时的所有变化提交到暂存区，包括文件内容修改(modified)以及新文件(new)，但不包括被删除的文件。</p>
-<h2 id="git-add-u-（git-add-–update-）"><a href="#git-add-u-（git-add-–update-）" class="headerlink" title="git add -u .（git add –update .）"></a>git add -u .（git add –update .）</h2><p>监控已经被add的文件（即tracked file），会将被修改的文件提交到暂存区。但不会提交新文件（untracked file）。</p>
-<h2 id="git-add-A-（git-add-–all-）"><a href="#git-add-A-（git-add-–all-）" class="headerlink" title="git add -A .（git add –all .）"></a>git add -A .（git add –all .）</h2><p>是上面两个功能的合集。</p>
-<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><ul>
-<li><p>git add -A  提交所有变化</p>
-</li>
-<li><p>git add -u  提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)</p>
-</li>
-<li><p>git add .  提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</p>
-</li>
-<li><h1 id="Git-commit"><a href="#Git-commit" class="headerlink" title="Git commit"></a>Git commit</h1></li>
-</ul>
-<p>git commit 主要是将暂存区里的改动给提交到本地的版本库。每次使用git commit 命令我们都会在本地版本库生成一个40位的哈希值，这个哈希值也叫commit-id，commit-id在版本回退的时候是非常有用的，它相当于一个快照,可以在未来的任何时候通过与git reset的组合命令回到这里。</p>
-<h2 id="git-commit-m-‘message’"><a href="#git-commit-m-‘message’" class="headerlink" title="git commit -m ‘message’"></a>git commit -m ‘message’</h2><p>“-m ”参数表示可以直接输入后面的“message”，如果不加-m参数，那么是不能直接输入message的，而是会调用一个编辑器一般是vim来让你输入这个message，message即是我们用来简要说明这次提交的语句。</p>
-<h2 id="git-commit-am-‘message’-am等同于-a-m"><a href="#git-commit-am-‘message’-am等同于-a-m" class="headerlink" title="git commit -am ‘message’ -am等同于-a -m"></a>git commit -am ‘message’ -am等同于-a -m</h2><p>“-a”参数可以将所有已跟踪文件中的执行修改或删除操作的文件都提交到本地仓库，即使它们没有经过git dd添加到暂存区。</p>
-<p>注意: 新加的文件（即没有被git系统管理的文件）是不能被提交到本地仓库的。</p>
+<p>git add
+[参数]<路径>作用就是将我们需要提交的代码从工作区添加到暂存区，就是告诉git系统，我们要提交哪些文件，之后就可以使用git
+commit命令进行提交了。</p>
+<h2 id="git-add-.">git add .</h2>
+<p>“.”表示当前目录，可以修改。监控工作区的状态树，使用它会把工作时的所有变化提交到暂存区，包括文件内容修改(modified)以及新文件(new)，但不包括被删除的文件。</p>
+<h2 id="git-add--u-.git-add-update-.">git add -u .（git add –update
+.）</h2>
+<p>监控已经被add的文件（即tracked
+file），会将被修改的文件提交到暂存区。但不会提交新文件（untracked
+file）。</p>
+<h2 id="git-add--a-.git-add-all-.">git add -A .（git add –all .）</h2>
+<p>是上面两个功能的合集。</p>
+<h3 id="总结">总结：</h3>
 <ul>
-<li><h1 id="git-remote-add-origin-https-Address"><a href="#git-remote-add-origin-https-Address" class="headerlink" title="git remote add origin https_Address"></a>git remote add origin https_Address</h1></li>
+<li><p>git add -A  提交所有变化</p></li>
+<li><p>git add -u
+ 提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)</p></li>
+<li><p>git add .
+ 提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</p></li>
+<li><h1 id="git-commit">Git commit</h1></li>
+</ul>
+<p>git commit 主要是将暂存区里的改动给提交到本地的版本库。每次使用git
+commit
+命令我们都会在本地版本库生成一个40位的哈希值，这个哈希值也叫commit-id，commit-id在版本回退的时候是非常有用的，它相当于一个快照,可以在未来的任何时候通过与git
+reset的组合命令回到这里。</p>
+<h2 id="git-commit--m-message">git commit -m ‘message’</h2>
+<p>“-m
+”参数表示可以直接输入后面的“message”，如果不加-m参数，那么是不能直接输入message的，而是会调用一个编辑器一般是vim来让你输入这个message，message即是我们用来简要说明这次提交的语句。
+## git commit -am ‘message’ -am等同于-a -m</p>
+<p>“-a”参数可以将所有已跟踪文件中的执行修改或删除操作的文件都提交到本地仓库，即使它们没有经过git
+dd添加到暂存区。</p>
+<p>注意:
+新加的文件（即没有被git系统管理的文件）是不能被提交到本地仓库的。</p>
+<ul>
+<li><h1 id="git-remote-add-origin-https_address">git remote add origin
+https_Address</h1></li>
 </ul>
 <p>添加远程库，即建立本地仓库与远程仓库关联。</p>
 <ul>
-<li><h1 id="git-pull-–rebase-origin-master"><a href="#git-pull-–rebase-origin-master" class="headerlink" title="git pull –rebase origin master"></a>git pull –rebase origin master</h1></li>
+<li><h1 id="git-pull-rebase-origin-master">git pull –rebase origin
+master</h1></li>
 </ul>
 <p>在本地仓库生成“README.md”和“README.en.md”两个文件。</p>
 <ul>
-<li><h1 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h1></li>
+<li><h1 id="git-push">git push</h1></li>
 </ul>
-<p>git push的一般形式为 git push &lt;远程主机名&gt; &lt;本地分支名&gt; &lt;远程分支名&gt; ，例如 git push origin master：refs&#x2F;for&#x2F;master ，即是将本地的master分支推送到远程主机origin上的对应master分支， origin是远程主机名，第一个master是本地分支名，第二个master是远程分支名。</p>
-<h2 id="git-push-origin-master"><a href="#git-push-origin-master" class="headerlink" title="git push origin master"></a>git push origin master</h2><p>如果远程分支被省略，如上则表示将本地分支推送到与之存在追踪关系的远程分支（通常两者同名），如果该远程分支不存在，则会被新建。</p>
-<h2 id="git-push-origin-refs-for-master"><a href="#git-push-origin-refs-for-master" class="headerlink" title="git push origin:refs&#x2F;for&#x2F;master"></a>git push origin:refs&#x2F;for&#x2F;master</h2><p>如果省略本地分支名，则表示删除指定的远程分支，因为这等同于推送一个空的本地分支到远程分支，等同于 git push origin –delete master。</p>
-<h2 id="git-push-origin"><a href="#git-push-origin" class="headerlink" title="git push origin"></a>git push origin</h2><p>如果当前分支与远程分支存在追踪关系，则本地分支和远程分支都可以省略，将当前分支推送到origin主机的对应分支。</p>
-<h2 id="git-push-1"><a href="#git-push-1" class="headerlink" title="git push"></a>git push</h2><p>如果当前分支只有一个远程分支，那么主机名都可以省略，形如 git push，可以使用git branch -r ，查看远程的分支名。</p>
-<h2 id="git-push-u-origin-master"><a href="#git-push-u-origin-master" class="headerlink" title="git push -u origin master"></a>git push -u origin master</h2><p>如果当前分支与多个主机存在追踪关系，则可以使用 -u 参数指定一个默认主机，这样后面就可以不加任何参数使用git push。</p>
-<h2 id="git-push-–all-origin"><a href="#git-push-–all-origin" class="headerlink" title="git push –all origin"></a>git push –all origin</h2><p>当遇到这种情况就是不管是否存在对应的远程分支，将本地的所有分支都推送到远程主机，这时需要 -all 选项。</p>
-<h2 id="git-push-–force-origin"><a href="#git-push-–force-origin" class="headerlink" title="git push –force origin"></a>git push –force origin</h2><p>git push的时候需要本地先gitpull更新到跟服务器版本一致，如果本地版本库比远程服务器上的低，那么一般会提示你git pull更新，如果一定要提交，那么可以使用这个命令。</p>
-<h2 id="git-push-origin-–tags"><a href="#git-push-origin-–tags" class="headerlink" title="git push origin –tags"></a>git push origin –tags</h2><p>git push 的时候不会推送标签，如果一定要推送标签的话那么可以使用这个命令。</p>
+<p>git push的一般形式为 git push <远程主机名> <本地分支名> <远程分支名>
+，例如 git push origin master：refs/for/master
+，即是将本地的master分支推送到远程主机origin上的对应master分支，
+origin是远程主机名，第一个master是本地分支名，第二个master是远程分支名。</p>
+<h2 id="git-push-origin-master">git push origin master</h2>
+<p>如果远程分支被省略，如上则表示将本地分支推送到与之存在追踪关系的远程分支（通常两者同名），如果该远程分支不存在，则会被新建。</p>
+<h2 id="git-push-originrefsformaster">git push
+origin:refs/for/master</h2>
+<p>如果省略本地分支名，则表示删除指定的远程分支，因为这等同于推送一个空的本地分支到远程分支，等同于
+git push origin –delete master。</p>
+<h2 id="git-push-origin">git push origin</h2>
+<p>如果当前分支与远程分支存在追踪关系，则本地分支和远程分支都可以省略，将当前分支推送到origin主机的对应分支。</p>
+<h2 id="git-push-1">git push</h2>
+<p>如果当前分支只有一个远程分支，那么主机名都可以省略，形如 git
+push，可以使用git branch -r ，查看远程的分支名。</p>
+<h2 id="git-push--u-origin-master">git push -u origin master</h2>
+<p>如果当前分支与多个主机存在追踪关系，则可以使用 -u
+参数指定一个默认主机，这样后面就可以不加任何参数使用git push。</p>
+<h2 id="git-push-all-origin">git push –all origin</h2>
+<p>当遇到这种情况就是不管是否存在对应的远程分支，将本地的所有分支都推送到远程主机，这时需要
+-all 选项。</p>
+<h2 id="git-push-force-origin">git push –force origin</h2>
+<p>git
+push的时候需要本地先gitpull更新到跟服务器版本一致，如果本地版本库比远程服务器上的低，那么一般会提示你git
+pull更新，如果一定要提交，那么可以使用这个命令。</p>
+<h2 id="git-push-origin-tags">git push origin –tags</h2>
+<p>git push
+的时候不会推送标签，如果一定要推送标签的话那么可以使用这个命令。</p>
 
     </div>
 
@@ -340,8 +386,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/03/03/C++%E8%BF%9E%E6%8E%A5MYSQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="C++连接MYSQL数据库">
-                  <i class="fa fa-angle-left"></i> C++连接MYSQL数据库
+                <a href="/2020/03/03/Python%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E6%8C%89%E7%85%A7%E6%8B%8D%E6%91%84%E6%97%A5%E6%9C%9F%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E5%BD%92%E7%B1%BB/" rel="prev" title="Python实现图片按照拍摄日期进行自动归类">
+                  <i class="fa fa-angle-left"></i> Python实现图片按照拍摄日期进行自动归类
                 </a>
             </div>
             <div class="post-nav-item">

@@ -66,6 +66,12 @@
 
 
 
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -170,18 +176,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -273,9 +279,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>面对堆积如山的照片，手工归类太烦易出错，这里用python写了一段程序，可以实现具有拍摄时间照片的自动归类，符合条件的文件被移走了，不符合的没有变化，使用者只需根据自己的需要修改PhotoPath和NewPath的值即可。</p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">from shutil import Error</span><br><span class="line">from shutil import copystat</span><br><span class="line">from shutil import copy2</span><br><span class="line">import exifread</span><br><span class="line">import shutil</span><br><span class="line">#图片所处的绝对路径，其中r表示去掉python的内部转义</span><br><span class="line">PhotoPath = r&#x27;D:/photo&#x27;</span><br><span class="line">NewPath = r&#x27;D:/pushiji/图片/生命时间轴P/&#x27;</span><br><span class="line">#根据传参判断复制的目标地址是否存在如果不存在进行创建，并且执行复制操作</span><br><span class="line">def copy_file(src_file,dst_dir):</span><br><span class="line">	if not os.path.isdir(dst_dir):</span><br><span class="line">		os.makedirs(dst_dir)</span><br><span class="line">	copy2(src_file,dst_dir)</span><br><span class="line"></span><br><span class="line">#根据传参判断复制的目标地址是否存在如果不存在进行创建，并且执行移动操作</span><br><span class="line">def move_file(src_file,dst_dir):</span><br><span class="line">	if not os.path.isdir(dst_dir):</span><br><span class="line">		os.makedirs(dst_dir)</span><br><span class="line">	shutil.move(src_file,dst_dir)</span><br><span class="line"></span><br><span class="line">#遍历整个图片路径底下的所有文件并获取其拍摄时间，根据拍摄时间进行操作</span><br><span class="line">def walk_file(file_path):</span><br><span class="line">	for root,dirs,files in os.walk(file_path,topdown=False):</span><br><span class="line">		for name in files:</span><br><span class="line">			photo = os.path.join(root,name)</span><br><span class="line">			try:</span><br><span class="line">				with open(photo, &#x27;rb&#x27;) as img:</span><br><span class="line">					dateStr = str(exifread.process_file(img)[&#x27;Image DateTime&#x27;])</span><br><span class="line">				year = dateStr[0:4]</span><br><span class="line">				month = dateStr[5:7]</span><br><span class="line">				new_path = NewPath+year+&#x27;年/&#x27;+year+&#x27;年&#x27;+month+&#x27;月/&#x27;</span><br><span class="line">				move_file(photo,new_path)</span><br><span class="line">				print(&quot;moved &#x27;&#123;&#125;&#x27; to &#x27;&#123;&#125;&#x27;&quot;.format(photo,new_path))</span><br><span class="line">			except:</span><br><span class="line">				print(&quot;Movement failed. &#123;&#125;&quot;.format(photo))</span><br><span class="line">		for name in dirs:</span><br><span class="line">			walk_file(name)</span><br><span class="line">walk_file(PhotoPath)</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><p>面对堆积如山的照片，手工归类太烦易出错，这里用python写了一段程序，可以实现具有拍摄时间照片的自动归类，符合条件的文件被移走了，不符合的没有变化，使用者只需根据自己的需要修改PhotoPath和NewPath的值即可。
+<span id="more"></span> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">from shutil import Error</span><br><span class="line">from shutil import copystat</span><br><span class="line">from shutil import copy2</span><br><span class="line">import exifread</span><br><span class="line">import shutil</span><br><span class="line">#图片所处的绝对路径，其中r表示去掉python的内部转义</span><br><span class="line">PhotoPath = r&#x27;D:/photo&#x27;</span><br><span class="line">NewPath = r&#x27;D:/pushiji/图片/生命时间轴P/&#x27;</span><br><span class="line">#根据传参判断复制的目标地址是否存在如果不存在进行创建，并且执行复制操作</span><br><span class="line">def copy_file(src_file,dst_dir):</span><br><span class="line">	if not os.path.isdir(dst_dir):</span><br><span class="line">		os.makedirs(dst_dir)</span><br><span class="line">	copy2(src_file,dst_dir)</span><br><span class="line"></span><br><span class="line">#根据传参判断复制的目标地址是否存在如果不存在进行创建，并且执行移动操作</span><br><span class="line">def move_file(src_file,dst_dir):</span><br><span class="line">	if not os.path.isdir(dst_dir):</span><br><span class="line">		os.makedirs(dst_dir)</span><br><span class="line">	shutil.move(src_file,dst_dir)</span><br><span class="line"></span><br><span class="line">#遍历整个图片路径底下的所有文件并获取其拍摄时间，根据拍摄时间进行操作</span><br><span class="line">def walk_file(file_path):</span><br><span class="line">	for root,dirs,files in os.walk(file_path,topdown=False):</span><br><span class="line">		for name in files:</span><br><span class="line">			photo = os.path.join(root,name)</span><br><span class="line">			try:</span><br><span class="line">				with open(photo, &#x27;rb&#x27;) as img:</span><br><span class="line">					dateStr = str(exifread.process_file(img)[&#x27;Image DateTime&#x27;])</span><br><span class="line">				year = dateStr[0:4]</span><br><span class="line">				month = dateStr[5:7]</span><br><span class="line">				new_path = NewPath+year+&#x27;年/&#x27;+year+&#x27;年&#x27;+month+&#x27;月/&#x27;</span><br><span class="line">				move_file(photo,new_path)</span><br><span class="line">				print(&quot;moved &#x27;&#123;&#125;&#x27; to &#x27;&#123;&#125;&#x27;&quot;.format(photo,new_path))</span><br><span class="line">			except:</span><br><span class="line">				print(&quot;Movement failed. &#123;&#125;&quot;.format(photo))</span><br><span class="line">		for name in dirs:</span><br><span class="line">			walk_file(name)</span><br><span class="line">walk_file(PhotoPath)</span><br></pre></td></tr></table></figure></p>
+
     </div>
 
     
@@ -291,10 +297,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2020/03/03/C++%E8%BF%9E%E6%8E%A5MYSQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="C++连接MYSQL数据库">
+                  <i class="fa fa-angle-left"></i> C++连接MYSQL数据库
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/03/03/C++%E8%BF%9E%E6%8E%A5MYSQL%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="C++连接MYSQL数据库">
-                  C++连接MYSQL数据库 <i class="fa fa-angle-right"></i>
+                <a href="/2020/03/14/Git%E6%95%99%E7%A8%8B-%E6%8A%8A%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%8E%A8%E9%80%81%E8%87%B3%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/" rel="next" title="Git教程-把本地仓库推送至远程仓库">
+                  Git教程-把本地仓库推送至远程仓库 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

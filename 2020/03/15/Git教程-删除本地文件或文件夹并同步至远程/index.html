@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除 。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index &#x2F; Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。 主要代码如下： 123git rm fileName or git rm -r mydirgit commit -m">
+    <meta name="description" content="删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除 。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index &#x2F; Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。 主要代码如下： 123git rm fileName or git rm -r mydirgit commit -m">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git教程-删除本地文件或文件夹并同步至远程">
 <meta property="og:url" content="http://example.com/2020/03/15/Git%E6%95%99%E7%A8%8B-%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E6%88%96%E6%96%87%E4%BB%B6%E5%A4%B9%E5%B9%B6%E5%90%8C%E6%AD%A5%E8%87%B3%E8%BF%9C%E7%A8%8B/index.html">
 <meta property="og:site_name" content="吉度奇点">
-<meta property="og:description" content="删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除 。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index &#x2F; Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。 主要代码如下： 123git rm fileName or git rm -r mydirgit commit -m">
+<meta property="og:description" content="删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除 。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index &#x2F; Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。 主要代码如下： 123git rm fileName or git rm -r mydirgit commit -m">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-15T08:31:39.000Z">
 <meta property="article:modified_time" content="2020-03-16T05:02:39.466Z">
@@ -64,6 +64,12 @@
   
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","display_overflow":"scroll","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-mml-chtml.js","integrity":"sha256-ihPtDDm7pTmSF9ViEsItlvsrBTsNkz0MOXMchzOwCQw="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
 
 
 
@@ -156,7 +162,18 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#rm-%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">rm 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%EF%BC%9A-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82"><span class="nav-number">1.1.</span> <span class="nav-text">作用： 删除工作区的文件。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%EF%BC%9A-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82"><span class="nav-number">1.2.</span> <span class="nav-text">结果： 删除了工作区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">git rm 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%EF%BC%9A-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%96%87%E4%BB%B6%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">作用： 删除工作区文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A-%E8%A6%81%E5%88%A0%E9%99%A4%E7%9A%84%E6%96%87%E4%BB%B6%E6%98%AF%E6%B2%A1%E6%9C%89%E4%BF%AE%E6%94%B9%E8%BF%87%E7%9A%84%EF%BC%8C%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%92%8C%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C-%E5%90%A6%E5%88%99%E4%BC%9A%E5%87%BA%E9%94%99%E3%80%82"><span class="nav-number">2.2.</span> <span class="nav-text">注意： 要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同,否则会出错。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%EF%BC%9A-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82-1"><span class="nav-number">2.3.</span> <span class="nav-text">结果： 删除了工作区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm-f"><span class="nav-number">3.</span> <span class="nav-text">git rm -f</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%EF%BC%9A-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA%E6%96%87%E4%BB%B6%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">作用： 删除工作区和暂存区文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A-%E8%A6%81%E5%88%A0%E9%99%A4%E7%9A%84%E6%96%87%E4%BB%B6%E5%B7%B2%E7%BB%8F%E4%BF%AE%E6%94%B9%E8%BF%87%EF%BC%8C%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%92%8C%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9%E4%B8%8D%E5%90%8C%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">注意： 要删除的文件已经修改过，就是说和当前版本库文件的内容不同。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%EF%BC%9A-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E3%80%81%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82"><span class="nav-number">3.3.</span> <span class="nav-text">结果： 删除了工作区、暂存区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm-%E2%80%93cached"><span class="nav-number">4.</span> <span class="nav-text">git rm –cached</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%EF%BC%9A-%E5%88%A0%E9%99%A4%E6%9A%82%E5%AD%98%E5%8C%BA%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BD%86%E4%BF%9D%E7%95%99%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA%E3%80%82"><span class="nav-number">4.1.</span> <span class="nav-text">作用： 删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%EF%BC%9A-%E5%88%A0%E9%99%A4%E4%BA%86%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BD%86%E4%BF%9D%E7%95%99%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E6%9C%89%E4%BF%AE%E6%94%B9%E5%B9%B6git-add%E5%88%B0%E6%9A%82%E5%AD%98%E5%8C%BA%EF%BC%8C%E5%86%8D%E6%89%A7%E8%A1%8C-git-rm-%E2%80%93cached%E5%92%8Cgit-commit%EF%BC%8C%E9%82%A3%E4%B9%88%E4%BF%9D%E7%95%99%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%96%87%E4%BB%B6%E6%98%AF%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%8C%E5%90%8C%E6%97%B6%E6%9A%82%E5%AD%98%E5%8C%BA%E7%9A%84%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E4%B9%9F%E8%A2%AB%E5%88%A0%E4%BA%86%E3%80%82"><span class="nav-number">4.2.</span> <span class="nav-text">结果： 删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git add到暂存区，再执行 git rm –cached和git commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#rm-%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">rm 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">作用： 删除工作区的文件。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">结果：
+删除了工作区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">git rm 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">作用：
+删除工作区文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F-%E8%A6%81%E5%88%A0%E9%99%A4%E7%9A%84%E6%96%87%E4%BB%B6%E6%98%AF%E6%B2%A1%E6%9C%89%E4%BF%AE%E6%94%B9%E8%BF%87%E7%9A%84%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%92%8C%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9%E7%9B%B8%E5%90%8C%E5%90%A6%E5%88%99%E4%BC%9A%E5%87%BA%E9%94%99"><span class="nav-number">2.2.</span> <span class="nav-text">注意：
+要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同,否则会出错。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6-1"><span class="nav-number">2.3.</span> <span class="nav-text">结果：
+删除了工作区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm--f"><span class="nav-number">3.</span> <span class="nav-text">git rm -f</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-%E5%88%A0%E9%99%A4%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-number">3.1.</span> <span class="nav-text">作用：
+删除工作区和暂存区文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F-%E8%A6%81%E5%88%A0%E9%99%A4%E7%9A%84%E6%96%87%E4%BB%B6%E5%B7%B2%E7%BB%8F%E4%BF%AE%E6%94%B9%E8%BF%87%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%92%8C%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9%E4%B8%8D%E5%90%8C"><span class="nav-number">3.2.</span> <span class="nav-text">注意：
+要删除的文件已经修改过，就是说和当前版本库文件的内容不同。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-%E5%88%A0%E9%99%A4%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">结果：
+删除了工作区、暂存区和版本库的文件。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-rm-cached"><span class="nav-number">4.</span> <span class="nav-text">git rm –cached</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-%E5%88%A0%E9%99%A4%E6%9A%82%E5%AD%98%E5%8C%BA%E6%96%87%E4%BB%B6%E4%BD%86%E4%BF%9D%E7%95%99%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E5%B0%86%E8%BF%99%E6%AC%A1%E5%88%A0%E9%99%A4%E6%94%BE%E5%85%A5%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-number">4.1.</span> <span class="nav-text">作用：
+删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-%E5%88%A0%E9%99%A4%E4%BA%86%E6%9A%82%E5%AD%98%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E4%BD%86%E4%BF%9D%E7%95%99%E4%BA%86%E5%B7%A5%E4%BD%9C%E5%8C%BA%E7%9A%84%E6%96%87%E4%BB%B6%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E6%9C%89%E4%BF%AE%E6%94%B9%E5%B9%B6git-add%E5%88%B0%E6%9A%82%E5%AD%98%E5%8C%BA%E5%86%8D%E6%89%A7%E8%A1%8C-git-rm-cached%E5%92%8Cgit-commit%E9%82%A3%E4%B9%88%E4%BF%9D%E7%95%99%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%96%87%E4%BB%B6%E6%98%AF%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84%E6%96%87%E4%BB%B6%E5%90%8C%E6%97%B6%E6%9A%82%E5%AD%98%E5%8C%BA%E7%9A%84%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93%E7%9A%84%E6%96%87%E4%BB%B6%E4%B9%9F%E8%A2%AB%E5%88%A0%E4%BA%86"><span class="nav-number">4.2.</span> <span class="nav-text">结果：
+删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git
+add到暂存区，再执行 git rm –cached和git
+commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,18 +188,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -274,78 +291,94 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除 。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index &#x2F; Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。</p>
+    <div class="post-body" itemprop="articleBody"><p>删除文件，一种是从工作区（Workspace）手动删除，另一种是用命令删除
+。如果文件还是未跟踪状态，直接删除就可以了。否则还需要清除暂存区（Index
+/
+Stage）改变，提交至仓库区（Repository）（或版本区），最终同步至远程仓库（Repository）。</p>
 <p>主要代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git rm fileName or git rm -r mydir</span><br><span class="line">git commit -m &quot;commit message&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
 <span id="more"></span>
-
 <p>详细介绍如下：</p>
 <p>Git 本地数据管理，大概可以分为三个区：</p>
 <p>工作区（Working Directory）：是可以直接编辑的地方。</p>
-<p>暂存区（Stage&#x2F;Index）：数据暂时存放的区域。</p>
+<p>暂存区（Stage/Index）：数据暂时存放的区域。</p>
 <p>版本库（commit History）：存放已经提交的数据。</p>
-<p>工作区的文件 git add 后到暂存区，暂存区的文件 git commit 后到版本库。</p>
-<h1 id="rm-命令"><a href="#rm-命令" class="headerlink" title="rm 命令"></a>rm 命令</h1><ul>
-<li><h2 id="作用：-删除工作区的文件。"><a href="#作用：-删除工作区的文件。" class="headerlink" title="作用： 删除工作区的文件。"></a>作用： 删除工作区的文件。</h2></li>
+<p>工作区的文件 git add 后到暂存区，暂存区的文件 git commit
+后到版本库。</p>
+<h1 id="rm-命令">rm 命令</h1>
+<ul>
+<li><h2 id="作用-删除工作区的文件">作用： 删除工作区的文件。</h2></li>
 </ul>
 <p>执行命令:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm file</span><br></pre></td></tr></table></figure>
-
-<p>rm 命令只是删除工作区的文件，并没有删除版本库的文件，想要删除版本库文件还要执行下面的命令：</p>
+<p>rm
+命令只是删除工作区的文件，并没有删除版本库的文件，想要删除版本库文件还要执行下面的命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add test.txt</span><br><span class="line">git commit -m &quot;delete test&quot;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><h2 id="结果：-删除了工作区和版本库的文件。"><a href="#结果：-删除了工作区和版本库的文件。" class="headerlink" title="结果： 删除了工作区和版本库的文件。"></a>结果： 删除了工作区和版本库的文件。</h2></li>
+<li><h2 id="结果-删除了工作区和版本库的文件">结果：
+删除了工作区和版本库的文件。</h2></li>
 </ul>
-<h1 id="git-rm-命令"><a href="#git-rm-命令" class="headerlink" title="git rm 命令"></a>git rm 命令</h1><ul>
-<li><h2 id="作用：-删除工作区文件，并且将这次删除放入暂存区。"><a href="#作用：-删除工作区文件，并且将这次删除放入暂存区。" class="headerlink" title="作用： 删除工作区文件，并且将这次删除放入暂存区。"></a>作用： 删除工作区文件，并且将这次删除放入暂存区。</h2></li>
-<li><h2 id="注意：-要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同-否则会出错。"><a href="#注意：-要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同-否则会出错。" class="headerlink" title="注意： 要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同,否则会出错。"></a>注意： 要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同,否则会出错。</h2></li>
+<h1 id="git-rm-命令">git rm 命令</h1>
+<ul>
+<li><h2 id="作用-删除工作区文件并且将这次删除放入暂存区">作用：
+删除工作区文件，并且将这次删除放入暂存区。</h2></li>
+<li><h2
+id="注意-要删除的文件是没有修改过的就是说和当前版本库文件的内容相同否则会出错">注意：
+要删除的文件是没有修改过的，就是说和当前版本库文件的内容相同,否则会出错。</h2></li>
 </ul>
 <p>再执行以下命令即可删除版本库文件：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;delete test&quot;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><h2 id="结果：-删除了工作区和版本库的文件。-1"><a href="#结果：-删除了工作区和版本库的文件。-1" class="headerlink" title="结果： 删除了工作区和版本库的文件。"></a>结果： 删除了工作区和版本库的文件。</h2></li>
+<li><h2 id="结果-删除了工作区和版本库的文件-1">结果：
+删除了工作区和版本库的文件。</h2></li>
 </ul>
-<h1 id="git-rm-f"><a href="#git-rm-f" class="headerlink" title="git rm -f"></a>git rm -f</h1><ul>
-<li><h2 id="作用：-删除工作区和暂存区文件，并且将这次删除放入暂存区。"><a href="#作用：-删除工作区和暂存区文件，并且将这次删除放入暂存区。" class="headerlink" title="作用： 删除工作区和暂存区文件，并且将这次删除放入暂存区。"></a>作用： 删除工作区和暂存区文件，并且将这次删除放入暂存区。</h2></li>
-<li><h2 id="注意：-要删除的文件已经修改过，就是说和当前版本库文件的内容不同。"><a href="#注意：-要删除的文件已经修改过，就是说和当前版本库文件的内容不同。" class="headerlink" title="注意： 要删除的文件已经修改过，就是说和当前版本库文件的内容不同。"></a>注意： 要删除的文件已经修改过，就是说和当前版本库文件的内容不同。</h2></li>
+<h1 id="git-rm--f">git rm -f</h1>
+<ul>
+<li><h2 id="作用-删除工作区和暂存区文件并且将这次删除放入暂存区">作用：
+删除工作区和暂存区文件，并且将这次删除放入暂存区。</h2></li>
+<li><h2
+id="注意-要删除的文件已经修改过就是说和当前版本库文件的内容不同">注意：
+要删除的文件已经修改过，就是说和当前版本库文件的内容不同。</h2></li>
 <li>文件修改过但还没 git add 到暂存区。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">D:\test&gt;git rm data.txt</span><br><span class="line">error: the following file has local modifications:</span><br><span class="line">    data.txt</span><br><span class="line">(use --cached to keep the file, or -f to force removal)</span><br><span class="line"></span><br><span class="line">D:\test&gt;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>文件修改过已经 git add 到暂存区。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">D:\test&gt;git add data.txt</span><br><span class="line"></span><br><span class="line">D:\test&gt;git rm data.txt</span><br><span class="line">error: the following file has changes staged in the index:</span><br><span class="line">    data.txt</span><br><span class="line">(use --cached to keep the file, or -f to force removal)</span><br><span class="line"></span><br><span class="line">D:\test&gt;</span><br></pre></td></tr></table></figure>
-
-<p>可见文件修改后不管有没有 git add 到暂存区，使用 git rm 命令删除都会报错。</p>
+<p>可见文件修改后不管有没有 git add 到暂存区，使用 git rm
+命令删除都会报错。</p>
 <ul>
 <li>解决方法</li>
 </ul>
 <p>执行删除命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\test&gt;git rm -f data.txt</span><br></pre></td></tr></table></figure>
-
 <p>查看状态（成功删除工作区和暂存区文件，并且将这次删除放入暂存区。）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D:\test&gt;git status</span><br><span class="line">On branch master</span><br><span class="line">Your branch is ahead of &#x27;origin/master&#x27; by 1 commit.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)</span><br><span class="line">        deleted:    data.txt</span><br><span class="line">D:\test&gt;</span><br></pre></td></tr></table></figure>
-
 <p>然后提交：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">D:\test&gt;git commit -m &quot;delete data by -f&quot;</span><br><span class="line">[master 8ff2f05] delete data by -f</span><br><span class="line"> 1 file changed, 1 deletion(-)</span><br><span class="line"> delete mode 100644 data.txt</span><br><span class="line">D:\test&gt;</span><br></pre></td></tr></table></figure>
-
 <p>成功删除了版本库文件。</p>
 <ul>
-<li><h2 id="结果：-删除了工作区、暂存区和版本库的文件。"><a href="#结果：-删除了工作区、暂存区和版本库的文件。" class="headerlink" title="结果： 删除了工作区、暂存区和版本库的文件。"></a>结果： 删除了工作区、暂存区和版本库的文件。</h2></li>
+<li><h2 id="结果-删除了工作区暂存区和版本库的文件">结果：
+删除了工作区、暂存区和版本库的文件。</h2></li>
 </ul>
-<h1 id="git-rm-–cached"><a href="#git-rm-–cached" class="headerlink" title="git rm –cached"></a>git rm –cached</h1><ul>
-<li><h2 id="作用：-删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。"><a href="#作用：-删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。" class="headerlink" title="作用： 删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。"></a>作用： 删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。</h2></li>
+<h1 id="git-rm-cached">git rm –cached</h1>
+<ul>
+<li><h2
+id="作用-删除暂存区文件但保留工作区的文件并且将这次删除放入暂存区">作用：
+删除暂存区文件，但保留工作区的文件，并且将这次删除放入暂存区。</h2></li>
 </ul>
 <p>执行删除命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git rm --cached file</span><br><span class="line">rm file</span><br></pre></td></tr></table></figure>
-
 <p>然后提交：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;commit message&quot;</span><br></pre></td></tr></table></figure>
-
 <p>成功删除了版本库文件。</p>
 <ul>
-<li><h2 id="结果：-删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git-add到暂存区，再执行-git-rm-–cached和git-commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。"><a href="#结果：-删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git-add到暂存区，再执行-git-rm-–cached和git-commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。" class="headerlink" title="结果： 删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git add到暂存区，再执行 git rm –cached和git commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。"></a>结果： 删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git add到暂存区，再执行 git rm –cached和git commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。</h2></li>
+<li><h2
+id="结果-删除了暂存区和版本库的文件但保留了工作区的文件如果文件有修改并git-add到暂存区再执行-git-rm-cached和git-commit那么保留的工作区文件是修改后的文件同时暂存区的修改文件和版本库的文件也被删了">结果：
+删除了暂存区和版本库的文件，但保留了工作区的文件。如果文件有修改并git
+add到暂存区，再执行 git rm –cached和git
+commit，那么保留的工作区文件是修改后的文件，同时暂存区的修改文件和版本库的文件也被删了。</h2></li>
 </ul>
 
     </div>
