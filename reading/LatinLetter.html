@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度奇点｜拉丁字母点读              * {             margin: 0;             padding: 0;             box-sizing: border-box;             font-family: system-ui, -apple-system, &quot;Microsoft Yahei&quot;, s">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-08-26T09:11:54.366Z">
-<meta property="article:modified_time" content="2026-08-26T01:39:53.466Z">
+<meta property="article:published_time" content="2026-08-27T00:00:18.024Z">
+<meta property="article:modified_time" content="2026-08-27T00:00:18.024Z">
 <meta property="article:author" content="蒲世吉">
 <meta name="twitter:card" content="summary">
 
@@ -221,7 +221,7 @@
 
 
       
-  <li class="menu-item menu-item-latinletter"><a href="/reading/LatinLetter.html" rel="section"><i class="fa fa-font fa-fw"></i>拉丁字母</a></li>
+  <li class="menu-item menu-item-latinletter"><a href="/reading/LatinLetter.html" rel="section"><i class="fa fa-sort-alpha-asc fa-fw"></i>拉丁字母</a></li>
 
 
       
@@ -552,33 +552,35 @@
             <div class="phonetic-grid" id="wrap-consonant"></div>
         </div>
 
-        <p class="tip">传播链：腓尼基字母 → 西希腊字母 → 埃特鲁斯坎字母 → 拉丁字母。Y、Z为后期引进，专门用于转写希腊词汇。浏览器语音仅读取字母名称。</p>
+        <p class="tip">传播链：腓尼基字母 → 西希腊字母 → 埃特鲁斯坎字母 → 拉丁字母。Y、Z为后期引进，专门用于转写希腊词汇。浏览器内置语音朗读。</p>
+        <!--
         <footer>© 2026~<span id="copyYear"></span> PuShiji. All Rights Reserved.</footer>
+        -->
     </div>
 
     <script>
         const latinList = [
-            {upper:"A",lower:"a",ipa:"/aː/",speak:"A",cls:"vowel",origin:"承袭埃特鲁斯坎<br>源腓尼基牛头"},
-            {upper:"B",lower:"b",ipa:"/beː/",speak:"B",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基房屋"},
-            {upper:"C",lower:"c",ipa:"/keː/",speak:"C",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基骆驼"},
-            {upper:"D",lower:"d",ipa:"/deː/",speak:"D",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基门扇"},
-            {upper:"E",lower:"e",ipa:"/eː/",speak:"E",cls:"vowel",origin:"承袭埃特鲁斯坎<br>源腓尼基人形"},
-            {upper:"F",lower:"f",ipa:"/ef/",speak:"F",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基钉子"},
+            {upper:"A",lower:"a",ipa:"/aː/",speak:"A",cls:"vowel",origin:"承埃特鲁斯坎<br>源腓尼基牛头"},
+            {upper:"B",lower:"b",ipa:"/beː/",speak:"B",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基房屋"},
+            {upper:"C",lower:"c",ipa:"/keː/",speak:"C",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基骆驼"},
+            {upper:"D",lower:"d",ipa:"/deː/",speak:"D",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基门扇"},
+            {upper:"E",lower:"e",ipa:"/eː/",speak:"E",cls:"vowel",origin:"承埃特鲁斯坎<br>源腓尼基人形"},
+            {upper:"F",lower:"f",ipa:"/ef/",speak:"F",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基钉子"},
             {upper:"G",lower:"g",ipa:"/ɡeː/",speak:"G",cls:"consonant",origin:"拉丁内部改造<br>C字母变体"},
-            {upper:"H",lower:"h",ipa:"/haː/",speak:"H",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基栅栏"},
-            {upper:"I",lower:"i",ipa:"/iː/",speak:"I",cls:"vowel",origin:"承袭埃特鲁斯坎<br>源腓尼基手指"},
-            {upper:"K",lower:"k",ipa:"/kaː/",speak:"K",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基手掌"},
-            {upper:"L",lower:"l",ipa:"/el/",speak:"L",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基手杖"},
-            {upper:"M",lower:"m",ipa:"/em/",speak:"M",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基水波"},
-            {upper:"N",lower:"n",ipa:"/en/",speak:"N",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基蛇形"},
-            {upper:"O",lower:"o",ipa:"/oː/",speak:"O",cls:"vowel",origin:"承袭埃特鲁斯坎<br>源腓尼基眼睛"},
-            {upper:"P",lower:"p",ipa:"/peː/",speak:"P",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基嘴巴"},
-            {upper:"Q",lower:"q",ipa:"/kuː/",speak:"Q",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基猴子"},
-            {upper:"R",lower:"r",ipa:"/er/",speak:"R",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基人头"},
-            {upper:"S",lower:"s",ipa:"/es/",speak:"S",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基牙齿"},
-            {upper:"T",lower:"t",ipa:"/teː/",speak:"T",cls:"consonant",origin:"承袭埃特鲁斯坎<br>源腓尼基标记"},
-            {upper:"V",lower:"v",ipa:"/uː/",speak:"V",cls:"vowel",origin:"承袭埃特鲁斯坎<br>源腓尼基钩子"},
-            {upper:"X",lower:"x",ipa:"/ks/",speak:"X",cls:"consonant",origin:"承袭埃特鲁斯坎<br>外来音素符号"},
+            {upper:"H",lower:"h",ipa:"/haː/",speak:"H",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基栅栏"},
+            {upper:"I",lower:"i",ipa:"/iː/",speak:"I",cls:"vowel",origin:"承埃特鲁斯坎<br>源腓尼基手指"},
+            {upper:"K",lower:"k",ipa:"/kaː/",speak:"K",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基手掌"},
+            {upper:"L",lower:"l",ipa:"/el/",speak:"L",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基手杖"},
+            {upper:"M",lower:"m",ipa:"/em/",speak:"M",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基水波"},
+            {upper:"N",lower:"n",ipa:"/en/",speak:"N",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基蛇形"},
+            {upper:"O",lower:"o",ipa:"/oː/",speak:"O",cls:"vowel",origin:"承埃特鲁斯坎<br>源腓尼基眼睛"},
+            {upper:"P",lower:"p",ipa:"/peː/",speak:"P",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基嘴巴"},
+            {upper:"Q",lower:"q",ipa:"/kuː/",speak:"Q",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基猴子"},
+            {upper:"R",lower:"r",ipa:"/er/",speak:"R",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基人头"},
+            {upper:"S",lower:"s",ipa:"/es/",speak:"S",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基牙齿"},
+            {upper:"T",lower:"t",ipa:"/teː/",speak:"T",cls:"consonant",origin:"承埃特鲁斯坎<br>源腓尼基标记"},
+            {upper:"V",lower:"v",ipa:"/uː/",speak:"V",cls:"vowel",origin:"承埃特鲁斯坎<br>源腓尼基钩子"},
+            {upper:"X",lower:"x",ipa:"/ks/",speak:"X",cls:"consonant",origin:"承埃特鲁斯坎<br>外来音素符号"},
             {upper:"Y",lower:"y",ipa:"/yː/",speak:"Y",cls:"vowel",origin:"后期借入<br>希腊字母"},
             {upper:"Z",lower:"z",ipa:"/zetːa/",speak:"Z",cls:"consonant",origin:"后期借入<br>希腊字母"}
         ];
@@ -739,7 +741,7 @@
         btnStart.onclick = startAutoPlay;
         btnPause.onclick = togglePause;
         btnStop.onclick = stopAutoPlay;
-        document.getElementById('copyYear').textContent = new Date().getFullYear();
+        //document.getElementById('copyYear').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>

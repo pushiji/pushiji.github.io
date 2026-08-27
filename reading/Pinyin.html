@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度奇点｜汉语拼音点读              * {             margin: 0;             padding: 0;             box-sizing: border-box;             font-family: system-ui, -apple-system, &quot;Microsoft Yahei&quot;, s">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-08-26T09:12:03.435Z">
-<meta property="article:modified_time" content="2026-08-09T09:31:56.000Z">
+<meta property="article:published_time" content="2026-08-27T00:02:34.995Z">
+<meta property="article:modified_time" content="2026-08-27T00:02:34.995Z">
 <meta property="article:author" content="蒲世吉">
 <meta name="twitter:card" content="summary">
 
@@ -221,7 +221,7 @@
 
 
       
-  <li class="menu-item menu-item-latinletter"><a href="/reading/LatinLetter.html" rel="section"><i class="fa fa-font fa-fw"></i>拉丁字母</a></li>
+  <li class="menu-item menu-item-latinletter"><a href="/reading/LatinLetter.html" rel="section"><i class="fa fa-sort-alpha-asc fa-fw"></i>拉丁字母</a></li>
 
 
       
@@ -547,7 +547,9 @@
         <div class="phonetic-grid" id="wrap-zhengti"></div>
         <p class="tip">配色：橙色=声母｜亮蓝=单韵母｜亮黄=复韵母｜浅青=前鼻韵母｜浅紫=后鼻韵母｜浅绿=整体认读音节｜点击卡片播放读音</p>
         <audio id="audioPlayer" controls></audio>
+        <!--
         <footer>© 2026~<span id="copyYear"></span> PuShiji. All Rights Reserved.</footer>
+        -->
     </div>
     <script>
         const pinyinData = {
@@ -809,7 +811,7 @@
         btnStart.onclick = startAutoPlay;
         btnPause.onclick = togglePause;
         btnStop.onclick = stopAutoPlay;
-        document.getElementById('copyYear').textContent = new Date().getFullYear();
+        //document.getElementById('copyYear').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
