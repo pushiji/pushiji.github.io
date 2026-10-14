@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-14T07:58:30.363Z">
-<meta property="article:modified_time" content="2026-10-14T07:58:30.363Z">
+<meta property="article:published_time" content="2026-10-14T09:24:51.054Z">
+<meta property="article:modified_time" content="2026-10-14T09:24:51.054Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -307,6 +307,18 @@ html, body {
 
 .card { background: var(--card); border-radius: var(--radius-card); box-shadow: var(--shadow); overflow: hidden; width: 100%; }
 .page > .card { width: 100%; min-width: 0; }
+
+/* ============================================================
+   卡片排序（全局生效）
+   单列：时间 → 日历 → 节气 → 月相 → 节日 → 黄历
+   两列：左列 时间/节气/月相/节日；右列 日历/黄历（顺序不变）
+   ============================================================ */
+.hero-card     { order: 1; }
+.calendar-card { order: 2; }
+.term-card     { order: 3; }
+.moon-card     { order: 4; }
+.festival-card { order: 5; }
+.almanac-card  { order: 6; }
 
 .section-title { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5160; font-weight: 600; letter-spacing: .5px; margin-bottom: 16px; }
 .section-title .bar { width: 3px; height: 14px; border-radius: 2px; }
@@ -1274,7 +1286,7 @@ const Model = {
 /* ============================================================
  * 模块 4 · 视图渲染层
    宽容器两列：左列 = 时间/节气/月相/节日；右列 = 日历/黄历
-   窄容器单列：按顺序堆叠
+   窄容器单列：按 order 排序 → 时间 → 日历 → 节气 → 月相 → 节日 → 黄历
    ============================================================ */
 const View = {
 
