@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-14T00:43:28.843Z">
-<meta property="article:modified_time" content="2026-10-14T00:43:28.843Z">
+<meta property="article:published_time" content="2026-10-14T07:58:30.363Z">
+<meta property="article:modified_time" content="2026-10-14T07:58:30.363Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -248,11 +248,11 @@
       
       <div class="post-body">
           <!DOCTYPE html>
-<html lang="zh-CN" data-page-node-id="pFGziuXDq3vl3w2Y41u095">
-<head data-page-node-id="krnHZUp8CQvh9pSfEb1eA1">
-<meta charset="UTF-8" data-page-node-id="x8efEfkfBB9ug4TGrgaDdK">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ZYy2lxeFUYKvIPOsENcPNe">
-<meta name="theme-color" content="#eef0f3" data-page-node-id="eyrx3B6f7VRmjOchNqF6Ho">
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#eef0f3">
 <title>吉度日历</title>
 <style>
 :root {
@@ -288,22 +288,25 @@ html, body {
   min-height: 100vh;
 }
 
+/* 容器查询锚点：让 @container 跟随 #app（iframe）实际宽度响应式 */
+#app { width: 100%; container-type: inline-size; }
+
+/* ============================================================
+   默认单列
+   ============================================================ */
 .page {
   max-width: 1220px;
   margin: 0 auto;
-  padding: 10px 16px 32px;
-  display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 14px;
-  align-items: start;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.col-left { display: flex; flex-direction: column; gap: 12px; }
-.col-right { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.card { background: var(--card); border-radius: var(--radius-card); box-shadow: var(--shadow); overflow: hidden; width: 100%; }
+/* 单列时，让 .col-left / .col-right 透明，内部卡片直接成为 .page 子项 */
+.col-left, .col-right { display: contents; }
 
-/* 容器查询锚点：让下方 @container 规则跟随 #app 实际宽度（而非浏览器视口）自适应，
-   这样无论直接嵌入 Hexo 正文还是放进 iframe，都能正确切换单/双栏 */
-#app { width: 100%; container-type: inline-size; }
+.card { background: var(--card); border-radius: var(--radius-card); box-shadow: var(--shadow); overflow: hidden; width: 100%; }
+.page > .card { width: 100%; min-width: 0; }
 
 .section-title { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5160; font-weight: 600; letter-spacing: .5px; margin-bottom: 16px; }
 .section-title .bar { width: 3px; height: 14px; border-radius: 2px; }
@@ -313,199 +316,74 @@ html, body {
 .section-title .count { margin-left: auto; font-size: 11px; color: var(--text-light); background: #f4f5f7; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: 0; }
 
 /* ============================================================
-   模块 1 · 大时间卡
+   容器宽 ≥ 640px 时 → 两列
+   左列 = 时间卡 / 节气卡 / 月相卡 / 节日卡
+   右列 = 日历卡 / 黄历卡
    ============================================================ */
-.hero-card { padding: 18px 24px 16px; background: #ffffff; text-align: center; position: relative; }
-.hero-time { font-size: 46px; font-weight: 700; line-height: 1.1; letter-spacing: -2px; color: #1a1d24; font-variant-numeric: tabular-nums; margin-bottom: 12px; }
-.hero-date-line { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.55; font-variant-numeric: tabular-nums; margin-bottom: 4px; word-break: break-word; }
-.hero-lunar-line { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.55; font-variant-numeric: tabular-nums; word-break: break-word; margin-bottom: 14px; }
+@container (min-width: 640px) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    container-type: inline-size;
+  }
+  .col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    container-type: inline-size;
+  }
+}
 
 /* ============================================================
-   年度进度条（百分比浮标版 · 纯天数标题）
+   模块 1 · 大时间卡
    ============================================================ */
-.year-progress {
-  text-align: left;
-  padding-top: 14px;
-  border-top: 1px dashed var(--line-dark);
-}
+.hero-card { padding: 36px 24px 24px; background: #ffffff; text-align: center; position: relative; }
+.hero-time { font-size: 68px; font-weight: 700; line-height: 1; letter-spacing: -4px; color: #1a1d24; font-variant-numeric: tabular-nums; margin-bottom: 22px; }
+.hero-date-line { font-size: 13.5px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.6; font-variant-numeric: tabular-nums; margin-bottom: 6px; word-break: break-word; }
+.hero-lunar-line { font-size: 13.5px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.6; font-variant-numeric: tabular-nums; word-break: break-word; margin-bottom: 20px; }
 
-.year-progress-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-  gap: 10px;
-  min-height: 18px;
-}
-.year-progress-head .yp-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  letter-spacing: .2px;
-  white-space: nowrap;
-  min-width: 0;
-}
-.year-progress-head .yp-dot {
-  flex: 0 0 auto;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-}
-.year-progress-head .yp-days {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-sub);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: .1px;
-}
-.year-progress-head .yp-days .cur {
-  font-size: 14px;
-  font-weight: 700;
-  color: #303640;
-  letter-spacing: -.2px;
-}
+.year-progress { text-align: left; padding-top: 16px; border-top: 1px dashed var(--line-dark); }
+.year-progress-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; gap: 10px; min-height: 18px; }
+.year-progress-head .yp-label { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; letter-spacing: .2px; white-space: nowrap; min-width: 0; }
+.year-progress-head .yp-dot { flex: 0 0 auto; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--purple)); }
+.year-progress-head .yp-days { font-size: 12px; font-weight: 500; color: var(--text-sub); font-variant-numeric: tabular-nums; letter-spacing: .1px; }
+.year-progress-head .yp-days .cur { font-size: 14px; font-weight: 700; color: #303640; letter-spacing: -.2px; }
 .year-progress-head .yp-days .sep,
 .year-progress-head .yp-days .total,
-.year-progress-head .yp-days .unit {
-  color: var(--text-light);
-  font-weight: 500;
-}
-.year-progress-head .yp-left {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-light);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: .2px;
-  white-space: nowrap;
-}
+.year-progress-head .yp-days .unit { color: var(--text-light); font-weight: 500; }
+.year-progress-head .yp-left { font-size: 11px; font-weight: 500; color: var(--text-light); font-variant-numeric: tabular-nums; letter-spacing: .2px; white-space: nowrap; }
 
-.year-progress-bar-wrap {
-  position: relative;
-  padding-top: 18px;
-}
-
-.year-progress-percent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(-50%);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--blue);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -.2px;
-  line-height: 1.1;
-  white-space: nowrap;
-  transition: left .3s ease;
-  z-index: 3;
-}
-.year-progress-percent.edge-left {
-  transform: translateX(0);
-}
-.year-progress-percent.edge-right {
-  transform: translateX(0);
-  left: auto !important;
-  right: 0;
-}
-
-.year-progress-bar {
-  position: relative;
-  height: 8px;
-  border-radius: 4px;
-  background: #f0f2f5;
-  overflow: hidden;
-}
-.year-progress-fill {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #8596d9 0%, #5b72c9 45%, #7c5ec9 100%);
-  transition: width .3s ease;
-}
-.year-progress-quarter {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: rgba(255,255,255,.75);
-}
+.year-progress-bar-wrap { position: relative; padding-top: 18px; }
+.year-progress-percent { position: absolute; top: 0; left: 0; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; letter-spacing: -.2px; line-height: 1.1; white-space: nowrap; transition: left .3s ease; z-index: 3; }
+.year-progress-percent.edge-left { transform: translateX(0); }
+.year-progress-percent.edge-right { transform: translateX(0); left: auto !important; right: 0; }
+.year-progress-bar { position: relative; height: 8px; border-radius: 4px; background: #f0f2f5; overflow: hidden; }
+.year-progress-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: linear-gradient(90deg, #8596d9 0%, #5b72c9 45%, #7c5ec9 100%); transition: width .3s ease; }
+.year-progress-quarter { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.75); }
 .year-progress-quarter.q1 { left: 24.66%; }
 .year-progress-quarter.q2 { left: 49.59%; }
 .year-progress-quarter.q3 { left: 74.79%; }
-
-.year-progress-marker {
-  position: absolute;
-  top: 22px;
-  transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2.5px solid var(--blue);
-  box-shadow: 0 1px 3px rgba(91,114,201,.35);
-  transition: left .3s ease;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.year-progress-footer {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  text-align: center;
-  margin-top: 6px;
-  font-size: 10px;
-  color: var(--text-light);
-  letter-spacing: .2px;
-  font-variant-numeric: tabular-nums;
-}
+.year-progress-marker { position: absolute; top: 22px; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2.5px solid var(--blue); box-shadow: 0 1px 3px rgba(91,114,201,.35); transition: left .3s ease; z-index: 2; pointer-events: none; }
+.year-progress-footer { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; margin-top: 6px; font-size: 10px; color: var(--text-light); letter-spacing: .2px; font-variant-numeric: tabular-nums; }
 
 /* ============================================================
    模块 2 · 节气卡
    ============================================================ */
-.term-card { padding: 16px 22px 16px; }
-
-.term-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.term-head-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #4a5160;
-  font-weight: 600;
-  letter-spacing: .5px;
-}
-.term-head-title .bar {
-  width: 3px;
-  height: 14px;
-  border-radius: 2px;
-  background: var(--orange);
-}
-.term-season-tag {
-  font-size: 11px;
-  color: var(--orange);
-  background: var(--orange-soft);
-  padding: 2px 10px;
-  border-radius: 10px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.term-season-tag::before {
-  content: '';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
+.term-card { padding: 18px 22px 18px; }
+.term-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.term-head-title { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5160; font-weight: 600; letter-spacing: .5px; }
+.term-head-title .bar { width: 3px; height: 14px; border-radius: 2px; background: var(--orange); }
+.term-season-tag { font-size: 11px; color: var(--orange); background: var(--orange-soft); padding: 2px 10px; border-radius: 10px; font-weight: 600; letter-spacing: .5px; display: inline-flex; align-items: center; gap: 4px; }
+.term-season-tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 .term-line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .term-name { font-size: 19px; font-weight: 700; color: var(--text); letter-spacing: .5px; line-height: 1.2; }
 .term-name.next { color: var(--orange); }
@@ -513,170 +391,49 @@ html, body {
 .term-bar { position: relative; height: 6px; border-radius: 3px; background: #f0f2f5; margin: 12px 0 10px; }
 .term-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: linear-gradient(90deg, #f0b866, var(--orange)); }
 .term-bar-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid var(--orange); box-shadow: 0 1px 4px rgba(224,138,58,.35); }
-.term-tip { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); margin-bottom: 12px; }
+.term-tip { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); margin-bottom: 14px; }
 .term-tip .hl { color: var(--orange); font-weight: 600; }
-
-.term-hou {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--line-dark);
-  font-size: 12.5px;
-  line-height: 1.4;
-}
-.hou-title {
-  font-size: 11px;
-  color: var(--orange);
-  background: var(--orange-soft);
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  flex: 0 0 auto;
-}
-.hou-name {
-  color: var(--text);
-  font-weight: 600;
-  flex: 1;
-  letter-spacing: .3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.hou-progress {
-  color: var(--text-sub);
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  font-size: 12px;
-  flex: 0 0 auto;
-}
-.hou-progress .hou-num {
-  color: var(--orange);
-  font-weight: 600;
-}
+.term-hou { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line-dark); font-size: 12.5px; line-height: 1.4; }
+.hou-title { font-size: 11px; color: var(--orange); background: var(--orange-soft); padding: 2px 8px; border-radius: 6px; font-weight: 700; letter-spacing: 1px; flex: 0 0 auto; }
+.hou-name { color: var(--text); font-weight: 600; flex: 1; letter-spacing: .3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hou-progress { color: var(--text-sub); font-variant-numeric: tabular-nums; font-weight: 500; font-size: 12px; flex: 0 0 auto; }
+.hou-progress .hou-num { color: var(--orange); font-weight: 600; }
 
 /* ============================================================
    模块 3 · 月相卡
    ============================================================ */
-.moon-card { padding: 16px 22px 18px; }
-
-.moon-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-.moon-visual {
-  flex: 0 0 72px; height: 72px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 42px; line-height: 1; position: relative;
-  background: radial-gradient(circle at 72% 26%, rgba(140,105,220,.35), transparent 55%),
-              radial-gradient(circle at 26% 74%, rgba(220,180,80,.30), transparent 55%),
-              radial-gradient(circle at 40% 40%, #26213a 0%, #16131f 70%);
-  box-shadow: inset -6px -6px 18px rgba(0,0,0,.55),
-              inset 4px 4px 12px rgba(140,105,220,.14),
-              0 6px 18px rgba(20,15,40,.28);
-  overflow: hidden;
-}
-.moon-visual::after {
-  content: ''; position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.10), transparent 45%);
-  pointer-events: none;
-}
-.moon-visual .moon-emoji {
-  position: relative; z-index: 1;
-  filter: drop-shadow(0 0 8px rgba(220,180,80,.35));
-}
-
+.moon-card { padding: 18px 22px 20px; }
+.moon-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.moon-visual { flex: 0 0 78px; height: 78px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 46px; line-height: 1; position: relative; background: radial-gradient(circle at 72% 26%, rgba(140,105,220,.35), transparent 55%), radial-gradient(circle at 26% 74%, rgba(220,180,80,.30), transparent 55%), radial-gradient(circle at 40% 40%, #26213a 0%, #16131f 70%); box-shadow: inset -6px -6px 18px rgba(0,0,0,.55), inset 4px 4px 12px rgba(140,105,220,.14), 0 6px 18px rgba(20,15,40,.28); overflow: hidden; }
+.moon-visual::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.10), transparent 45%); pointer-events: none; }
+.moon-visual .moon-emoji { position: relative; z-index: 1; filter: drop-shadow(0 0 8px rgba(220,180,80,.35)); }
 .moon-info { flex: 1; min-width: 0; }
-.moon-name { font-size: 19px; font-weight: 700; color: var(--text); letter-spacing: .5px; line-height: 1.2; }
+.moon-name { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: .5px; line-height: 1.2; }
 .moon-idx { font-size: 12.5px; color: var(--text-sub); margin-top: 4px; font-variant-numeric: tabular-nums; }
 .moon-idx .age-num { color: var(--blue); font-weight: 600; }
-
-.moon-track {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  align-items: end;
-  padding-top: 6px;
-}
-.moon-track::before {
-  content: '';
-  position: absolute;
-  left: 6.25%;
-  right: 6.25%;
-  top: 20px;
-  height: 2px;
-  background: #eef1f5;
-  border-radius: 1px;
-  z-index: 0;
-}
-.moon-track-fill {
-  position: absolute;
-  left: 6.25%;
-  top: 20px;
-  height: 2px;
-  background: linear-gradient(90deg, #8596d9, #5b72c9 40%, #7c5ec9);
-  border-radius: 1px;
-  z-index: 1;
-  transition: width .3s ease;
-}
-
-.moon-node {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  transition: opacity .25s ease;
-}
+.moon-track { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; padding-top: 6px; }
+.moon-track::before { content: ''; position: absolute; left: 6.25%; right: 6.25%; top: 20px; height: 2px; background: #eef1f5; border-radius: 1px; z-index: 0; }
+.moon-track-fill { position: absolute; left: 6.25%; top: 20px; height: 2px; background: linear-gradient(90deg, #8596d9, #5b72c9 40%, #7c5ec9); border-radius: 1px; z-index: 1; transition: width .3s ease; }
+.moon-node { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: opacity .25s ease; }
 .moon-node.past { opacity: 1; }
 .moon-node.future { opacity: .35; }
 .moon-node.active { opacity: 1; }
-
-.moon-node .icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  line-height: 1;
-  background: #fff;
-  box-shadow: 0 0 0 3px #fff;
-  transition: all .25s ease;
-}
-.moon-node .label {
-  font-size: 10px;
-  color: var(--text-light);
-  letter-spacing: 0;
-  white-space: nowrap;
-  transition: color .2s ease, font-weight .2s ease;
-}
-
-.moon-node.active .icon {
-  transform: scale(1.15);
-  box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 5px rgba(91,114,201,.22);
-}
-.moon-node.active .label {
-  color: var(--blue);
-  font-weight: 700;
-}
+.moon-node .icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; line-height: 1; background: #fff; box-shadow: 0 0 0 3px #fff; transition: all .25s ease; }
+.moon-node .label { font-size: 10px; color: var(--text-light); letter-spacing: 0; white-space: nowrap; transition: color .2s ease, font-weight .2s ease; }
+.moon-node.active .icon { transform: scale(1.15); box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(91,114,201,.22); }
+.moon-node.active .label { color: var(--blue); font-weight: 700; }
 
 /* ============================================================
    模块 4 · 节日卡
    ============================================================ */
-.festival-card { padding: 16px 22px 12px; }
-.fest-range { display: flex; gap: 6px; margin-bottom: 12px; background: #f4f5f7; padding: 3px; border-radius: 10px; }
+.festival-card { padding: 18px 22px 12px; }
+.fest-range { display: flex; gap: 6px; margin-bottom: 14px; background: #f4f5f7; padding: 3px; border-radius: 10px; }
 .fest-range button { flex: 1; border: none; background: transparent; color: var(--text-sub); font-size: 12px; font-weight: 500; padding: 6px 8px; border-radius: 8px; cursor: pointer; transition: all .15s ease; font-family: inherit; }
 .fest-range button:hover { color: var(--text); }
 .fest-range button.active { background: #ffffff; color: var(--red); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-
 .fest-list { position: relative; }
 .fest-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
 .fest-row + .fest-row { border-top: 1px dashed var(--line); }
-
 .fest-icon { flex: 0 0 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
 .fest-icon.tone-cake   { background: linear-gradient(135deg, #fef4d2 0%, #fde1a3 100%); }
 .fest-icon.tone-red    { background: linear-gradient(135deg, #fde5e4 0%, #fbd2d0 100%); }
@@ -685,7 +442,6 @@ html, body {
 .fest-icon.tone-green  { background: linear-gradient(135deg, #e3f6ec 0%, #c9ecd9 100%); }
 .fest-icon.tone-blue   { background: linear-gradient(135deg, #e3ecfb 0%, #c8dbf5 100%); }
 .fest-icon.tone-purple { background: linear-gradient(135deg, #ede4fb 0%, #ddc9f5 100%); }
-
 .fest-info { flex: 1; min-width: 0; }
 .fest-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: .2px; line-height: 1.25; display: flex; align-items: center; gap: 6px; }
 .fest-tag { font-size: 10px; padding: 1px 6px; border-radius: 8px; font-weight: 500; letter-spacing: .3px; white-space: nowrap; }
@@ -696,28 +452,24 @@ html, body {
 .fest-days { font-size: 16px; font-weight: 700; color: var(--red); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.2px; }
 .fest-days.today { font-size: 13px; color: #fff; background: var(--red); padding: 3px 10px; border-radius: 12px; letter-spacing: 0; }
 .fest-days.ongoing { font-size: 13px; color: #fff; background: var(--green); padding: 3px 10px; border-radius: 12px; letter-spacing: 0; }
-
 .fest-toggle { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; padding: 10px 0 4px; border-top: 1px dashed var(--line); color: var(--blue); font-size: 12.5px; font-weight: 600; cursor: pointer; user-select: none; transition: opacity .15s ease; }
 .fest-toggle:hover { opacity: .75; }
 .fest-toggle .chev { display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform .2s ease; }
 .fest-toggle.expanded .chev { transform: rotate(180deg); }
-
 .fest-scroll { max-height: 360px; overflow-y: auto; scrollbar-width: thin; margin: 0 -22px; padding: 0 22px; }
 .fest-scroll::-webkit-scrollbar { width: 4px; }
 .fest-scroll::-webkit-scrollbar-thumb { background: #e3e6ea; border-radius: 2px; }
 .fest-scroll::-webkit-scrollbar-track { background: transparent; }
-
 .fest-empty { text-align: center; padding: 30px 0 20px; color: var(--text-light); font-size: 13px; }
 
 /* ============================================================
    模块 5 · 日历卡
    ============================================================ */
-.calendar-card { padding: 18px 20px 16px; }
-.cal-header { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 14px; gap: 10px; }
+.calendar-card { padding: 22px 20px 18px; }
+.cal-header { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 18px; gap: 10px; }
 .cal-title { font-size: 21px; font-weight: 700; letter-spacing: .2px; color: var(--text); display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .cal-title .year { font-size: 14px; font-weight: 500; color: var(--text-sub); }
 .cal-title .month-num { font-size: 21px; font-weight: 700; color: var(--text); }
-
 .cal-nav { display: flex; gap: 3px; align-items: center; }
 .cal-nav button { min-width: 32px; height: 32px; border: none; background: transparent; color: var(--text-sub); font-size: 15px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 9px; transition: background .15s ease, color .15s ease, transform .1s ease; font-family: inherit; padding: 0; user-select: none; }
 .cal-nav button:hover { background: #f4f5f7; color: var(--text); }
@@ -726,43 +478,33 @@ html, body {
 .cal-nav button.year-btn:hover { color: var(--blue); background: var(--blue-soft); }
 .cal-nav button.today-btn { min-width: auto; padding: 0 12px; font-size: 12.5px; font-weight: 600; color: var(--red); background: var(--red-soft); }
 .cal-nav button.today-btn:hover { background: #fbe3e3; }
-
 .cal-dow-row { display: grid; grid-template-columns: repeat(7, 1fr); padding-bottom: 6px; }
 .cal-dow { text-align: center; font-size: 13px; font-weight: 500; color: var(--text-sub); padding: 6px 0 10px; letter-spacing: .5px; }
 .cal-dow.weekend { color: var(--red); }
-
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
 .cal-cell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 2px; min-height: 74px; border-radius: var(--radius-cell); cursor: pointer; transition: background .12s ease, box-shadow .15s ease; user-select: none; contain: layout style; }
 .cal-cell:hover { background: #f7f8fa; }
 .cal-cell.other-month { opacity: .28; pointer-events: none; }
-
 .cal-cell .day-num { font-size: 19px; font-weight: 600; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -.4px; }
 .cal-cell.weekend .day-num { color: var(--red); }
 .cal-cell .day-label { font-size: 10.5px; line-height: 1.2; margin-top: 6px; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 6px); text-align: center; letter-spacing: .1px; }
 .cal-cell .day-label.term { color: var(--orange); font-weight: 500; }
 .cal-cell .day-label.festival { color: var(--red); font-weight: 500; }
-
-.cal-cell.selected:not(.today) {
-  background: linear-gradient(135deg, #f1f4fc 0%, #e8edf9 100%);
-  box-shadow: inset 0 0 0 1.5px rgba(91, 114, 201, .45), 0 2px 6px rgba(91, 114, 201, .08);
-}
+.cal-cell.selected:not(.today) { background: linear-gradient(135deg, #f1f4fc 0%, #e8edf9 100%); box-shadow: inset 0 0 0 1.5px rgba(91, 114, 201, .45), 0 2px 6px rgba(91, 114, 201, .08); }
 .cal-cell.selected:not(.today):hover { background: linear-gradient(135deg, #eaeefa 0%, #dee5f6 100%); }
 .cal-cell.selected:not(.today) .day-num { color: var(--blue); font-weight: 700; }
 .cal-cell.selected:not(.today) .day-label { color: var(--blue); font-weight: 500; }
 .cal-cell.selected:not(.today) .day-label.term { color: var(--orange); }
 .cal-cell.selected:not(.today) .day-label.festival { color: var(--red); }
-
 .cal-cell.today { background: var(--blue-grad); box-shadow: var(--shadow-cell); }
 .cal-cell.today:hover { background: var(--blue-grad); }
 .cal-cell.today .day-num { color: #ffffff; }
 .cal-cell.today .day-label { color: rgba(255, 255, 255, .9); }
 .cal-cell.today .day-label.term, .cal-cell.today .day-label.festival { color: #ffe4e4; }
-
 .cal-cell .badge { position: absolute; top: 4px; right: 4px; font-size: 9.5px; line-height: 15px; min-width: 15px; padding: 0 4px; border-radius: 5px; font-weight: 600; color: #ffffff; background: var(--red); letter-spacing: .2px; text-align: center; }
 .cal-cell .badge.work { background: var(--text-sub); }
 .cal-cell.today .badge { background: rgba(255, 255, 255, .3); color: #ffffff; }
 .cal-cell.selected:not(.today) .badge { background: var(--red); }
-
 .cal-cell .moon-dot { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 3.5px; height: 3.5px; border-radius: 50%; }
 .cal-cell .moon-dot.moon-0 { background: #4a5568; }
 .cal-cell .moon-dot.moon-1 { background: #6b8ec2; }
@@ -777,8 +519,8 @@ html, body {
 /* ============================================================
    模块 6 · 黄历详情卡
    ============================================================ */
-.almanac-card { padding: 20px 26px; }
-.yiji-list { padding: 0 0 16px; border-bottom: 1px dashed var(--line-dark); }
+.almanac-card { padding: 24px 26px; }
+.yiji-list { padding: 0 0 18px; border-bottom: 1px dashed var(--line-dark); }
 .yiji-row { display: flex; gap: 12px; padding: 6px 0; align-items: flex-start; }
 .yiji-row + .yiji-row { padding-top: 12px; }
 .yiji-icon { flex: 0 0 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; margin-top: 1px; }
@@ -786,13 +528,13 @@ html, body {
 .yiji-icon.j { background: linear-gradient(135deg, #e05858, var(--red)); }
 .yiji-body { flex: 1; font-size: 13.5px; color: #303640; line-height: 1.9; }
 .yiji-body .tag { display: inline-block; margin-right: 10px; white-space: nowrap; }
-.triple-row { display: grid; grid-template-columns: repeat(3, 1fr); padding: 16px 0; border-bottom: 1px dashed var(--line-dark); }
+.triple-row { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 0; border-bottom: 1px dashed var(--line-dark); }
 .triple-cell { text-align: center; padding: 0 10px; border-right: 1px solid var(--line); }
 .triple-cell:last-child { border-right: none; }
 .triple-key { font-size: 11.5px; color: var(--text-light); margin-bottom: 6px; letter-spacing: .5px; }
 .triple-val { font-size: 14px; color: #303640; font-weight: 500; }
 .triple-val.red { color: var(--red); }
-.hours-section { padding: 16px 0; border-bottom: 1px dashed var(--line-dark); }
+.hours-section { padding: 18px 0; border-bottom: 1px dashed var(--line-dark); }
 .hours-title { font-size: 12px; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-bottom: 12px; }
 .hours-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 -26px; padding: 0 26px; }
 .hours-scroll::-webkit-scrollbar { display: none; }
@@ -805,13 +547,13 @@ html, body {
 .hour-cell .jl { font-size: 11px; font-weight: 700; }
 .hour-cell .jl.y { color: var(--green); }
 .hour-cell .jl.n { color: var(--red); }
-.quad { display: grid; grid-template-columns: 90px 1fr 1fr 1fr; padding-top: 16px; }
+.quad { display: grid; grid-template-columns: 90px 1fr 1fr 1fr; padding-top: 18px; }
 .quad-cell { padding: 4px 12px; border-right: 1px solid var(--line); text-align: center; }
 .quad-cell:last-child { border-right: none; }
 .quad-key { font-size: 11.5px; color: var(--text-light); margin-bottom: 8px; letter-spacing: .5px; }
 .quad-val { font-size: 12.5px; color: #4a5160; line-height: 1.7; }
 .duty-big { font-size: 26px; font-weight: 700; color: #303640; letter-spacing: 4px; line-height: 1; }
-.pengzu { grid-column: 1 / -1; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line-dark); text-align: center; font-size: 12.5px; color: #4a5160; }
+.pengzu { grid-column: 1 / -1; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line-dark); text-align: center; font-size: 12.5px; color: #4a5160; }
 .pengzu .lbl { display: inline-block; color: var(--red); font-weight: 600; margin-right: 8px; padding: 1px 8px; border-radius: 10px; background: var(--red-soft); font-size: 11px; }
 
 /* 加载 / 错误 */
@@ -820,27 +562,16 @@ html, body {
 @keyframes spin { to { transform: rotate(360deg); } }
 .err { padding: 14px 18px; background: #fef2f2; color: #b91c1c; border-radius: 12px; font-size: 13px; text-align: center; max-width: 500px; margin: 40px auto; }
 
-/* 响应式 */
-@media (max-width: 1020px) {
-  .page { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 10px 12px 28px; }
-  .col-left, .col-right { display: contents; }
-  .page > .card, .col-left > .card, .col-right > .card, .page .card { width: 100%; max-width: 100%; min-width: 0; }
-  .hero-card     { order: 1; }
-  .calendar-card { order: 2; }
-  .term-card     { order: 3; }
-  .moon-card     { order: 4; }
-  .festival-card { order: 5; }
-  .almanac-card  { order: 6; }
-}
-
+/* ============================================================
+   尺寸微调（窄宽度下压缩内部元素）
+   ============================================================ */
 @media (max-width: 560px) {
-  .page { padding: 8px 10px 22px; }
-  .hero-card { padding: 16px 18px 14px; }
-  .hero-time { font-size: 44px; letter-spacing: -2px; margin-bottom: 12px; }
-  .hero-date-line, .hero-lunar-line { font-size: 12px; letter-spacing: .2px; }
-  .hero-lunar-line { margin-bottom: 12px; }
-
-  .year-progress { padding-top: 12px; }
+  .page { padding: 12px 10px 30px; }
+  .hero-card { padding: 28px 18px 20px; }
+  .hero-time { font-size: 56px; letter-spacing: -3px; margin-bottom: 18px; }
+  .hero-date-line, .hero-lunar-line { font-size: 12.5px; letter-spacing: .2px; }
+  .hero-lunar-line { margin-bottom: 16px; }
+  .year-progress { padding-top: 14px; }
   .year-progress-head { min-height: 16px; margin-bottom: 2px; }
   .year-progress-head .yp-label { gap: 5px; font-size: 11px; }
   .year-progress-head .yp-days { font-size: 11.5px; }
@@ -850,33 +581,29 @@ html, body {
   .year-progress-percent { font-size: 11.5px; }
   .year-progress-marker { top: 20px; width: 11px; height: 11px; border-width: 2px; }
   .year-progress-footer { font-size: 9.5px; margin-top: 5px; }
-
-  .term-card { padding: 14px 18px; }
-  .term-head { margin-bottom: 12px; }
+  .term-card { padding: 16px 18px; }
+  .term-head { margin-bottom: 14px; }
   .term-season-tag { font-size: 10.5px; padding: 2px 8px; }
   .term-name { font-size: 17px; }
   .term-name.next { font-size: 16px; }
   .term-hou { font-size: 12px; padding-top: 12px; margin-top: 12px; gap: 8px; }
   .hou-title { font-size: 10.5px; padding: 1px 7px; }
   .hou-progress { font-size: 11.5px; }
-
-  .moon-card { padding: 14px 18px; }
-  .moon-visual { flex: 0 0 64px; height: 64px; font-size: 36px; }
-  .moon-name { font-size: 17px; }
+  .moon-card { padding: 16px 18px; }
+  .moon-visual { flex: 0 0 68px; height: 68px; font-size: 40px; }
+  .moon-name { font-size: 18px; }
   .moon-idx { font-size: 12px; }
   .moon-node .icon { width: 24px; height: 24px; font-size: 15px; }
   .moon-node .label { font-size: 9px; }
   .moon-track::before { top: 18px; }
   .moon-track-fill { top: 18px; }
   .moon-node.active .icon { transform: scale(1.12); }
-
-  .festival-card { padding: 14px 18px 10px; }
+  .festival-card { padding: 16px 18px 10px; }
   .fest-icon { flex: 0 0 36px; height: 36px; font-size: 18px; border-radius: 10px; }
   .fest-name { font-size: 14px; }
   .fest-days { font-size: 15px; }
   .fest-scroll { margin: 0 -18px; padding: 0 18px; }
-
-  .calendar-card { padding: 14px 10px 12px; }
+  .calendar-card { padding: 16px 10px 12px; }
   .cal-header { padding-bottom: 12px; gap: 6px; }
   .cal-title { font-size: 17px; gap: 4px; }
   .cal-title .year { font-size: 12.5px; }
@@ -889,8 +616,7 @@ html, body {
   .cal-cell { min-height: 66px; padding: 8px 1px; border-radius: 10px; }
   .cal-cell .day-num { font-size: 16.5px; }
   .cal-cell .day-label { font-size: 9.5px; margin-top: 5px; }
-
-  .almanac-card { padding: 18px 18px; }
+  .almanac-card { padding: 20px 18px; }
   .yiji-body { font-size: 12.5px; }
   .yiji-body .tag { margin-right: 8px; }
   .hours-scroll { margin: 0 -18px; padding: 0 18px; }
@@ -905,7 +631,7 @@ html, body {
 }
 
 @media (max-width: 360px) {
-  .hero-time { font-size: 40px; letter-spacing: -1.5px; }
+  .hero-time { font-size: 48px; letter-spacing: -2px; }
   .hero-date-line, .hero-lunar-line { font-size: 11.5px; }
   .cal-cell { min-height: 58px; }
   .cal-cell .day-num { font-size: 15px; }
@@ -916,88 +642,16 @@ html, body {
   .year-progress-head .yp-left { display: none; }
 }
 
-/* ============================================================
-   容器查询（关键修复）
-   按 #app 容器实际宽度自适应，覆盖上方 @media 规则——
-   解决「浏览器视口很宽、但 Hexo 内容栏很窄」时双栏被挤压裁切的问题
-   ============================================================ */
-@container (max-width: 1020px) {
-  .page { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 10px 12px 28px; }
-  .col-left, .col-right { display: contents; }
-  .page > .card, .col-left > .card, .col-right > .card, .page .card { width: 100%; max-width: 100%; min-width: 0; }
-  .hero-card     { order: 1; }
-  .calendar-card { order: 2; }
-  .term-card     { order: 3; }
-  .moon-card     { order: 4; }
-  .festival-card { order: 5; }
-  .almanac-card  { order: 6; }
-}
-
+/* 按 #app 容器宽度做微调（iframe 场景更准） */
 @container (max-width: 560px) {
-  .page { padding: 8px 10px 22px; }
-  .hero-card { padding: 16px 18px 14px; }
-  .hero-time { font-size: 44px; letter-spacing: -2px; margin-bottom: 12px; }
-  .hero-date-line, .hero-lunar-line { font-size: 12px; letter-spacing: .2px; }
-  .hero-lunar-line { margin-bottom: 12px; }
-
-  .year-progress { padding-top: 12px; }
-  .year-progress-head { min-height: 16px; margin-bottom: 2px; }
-  .year-progress-head .yp-label { gap: 5px; font-size: 11px; }
-  .year-progress-head .yp-days { font-size: 11.5px; }
-  .year-progress-head .yp-days .cur { font-size: 13px; }
-  .year-progress-head .yp-left { font-size: 10.5px; }
-  .year-progress-bar-wrap { padding-top: 16px; }
-  .year-progress-percent { font-size: 11.5px; }
-  .year-progress-marker { top: 20px; width: 11px; height: 11px; border-width: 2px; }
-  .year-progress-footer { font-size: 9.5px; margin-top: 5px; }
-
-  .term-card { padding: 14px 18px; }
-  .term-head { margin-bottom: 12px; }
-  .term-season-tag { font-size: 10.5px; padding: 2px 8px; }
-  .term-name { font-size: 17px; }
-  .term-name.next { font-size: 16px; }
-  .term-hou { font-size: 12px; padding-top: 12px; margin-top: 12px; gap: 8px; }
-  .hou-title { font-size: 10.5px; padding: 1px 7px; }
-  .hou-progress { font-size: 11.5px; }
-
-  .moon-card { padding: 14px 18px; }
-  .moon-visual { flex: 0 0 64px; height: 64px; font-size: 36px; }
-  .moon-name { font-size: 17px; }
-  .moon-idx { font-size: 12px; }
-  .moon-node .icon { width: 24px; height: 24px; font-size: 15px; }
-  .moon-node .label { font-size: 9px; }
-  .moon-track::before { top: 18px; }
-  .moon-track-fill { top: 18px; }
-  .moon-node.active .icon { transform: scale(1.12); }
-
-  .festival-card { padding: 14px 18px 10px; }
-  .fest-icon { flex: 0 0 36px; height: 36px; font-size: 18px; border-radius: 10px; }
-  .fest-name { font-size: 14px; }
-  .fest-days { font-size: 15px; }
-  .fest-scroll { margin: 0 -18px; padding: 0 18px; }
-
-  .calendar-card { padding: 14px 10px 12px; }
-  .cal-header { padding-bottom: 12px; gap: 6px; }
-  .cal-title { font-size: 17px; gap: 4px; }
-  .cal-title .year { font-size: 12.5px; }
-  .cal-title .month-num { font-size: 17px; }
-  .cal-nav { gap: 1px; }
-  .cal-nav button { min-width: 28px; height: 28px; font-size: 13px; border-radius: 8px; }
-  .cal-nav button.year-btn { font-size: 14px; }
-  .cal-nav button.today-btn { padding: 0 9px; font-size: 11.5px; }
-  .cal-dow { font-size: 12px; padding: 4px 0 8px; }
+  .hero-time { font-size: 56px; letter-spacing: -3px; }
+  .calendar-card { padding: 16px 10px 12px; }
   .cal-cell { min-height: 66px; padding: 8px 1px; border-radius: 10px; }
   .cal-cell .day-num { font-size: 16.5px; }
   .cal-cell .day-label { font-size: 9.5px; margin-top: 5px; }
-
-  .almanac-card { padding: 18px 18px; }
-  .yiji-body { font-size: 12.5px; }
-  .yiji-body .tag { margin-right: 8px; }
-  .hours-scroll { margin: 0 -18px; padding: 0 18px; }
+  .almanac-card { padding: 20px 18px; }
   .hours-grid { display: flex; min-width: max-content; gap: 1px; }
   .hour-cell { flex: 0 0 52px; padding: 8px 4px; }
-  .hour-cell .hz { font-size: 12.5px; }
-  .hour-cell .gz { font-size: 10px; }
   .quad { grid-template-columns: 1fr 1fr; gap: 0; }
   .quad-cell { padding: 8px 8px; border-right: none; }
   .quad-cell:nth-child(1), .quad-cell:nth-child(2) { border-bottom: 1px dashed var(--line-dark); }
@@ -1005,14 +659,30 @@ html, body {
 }
 
 @container (max-width: 360px) {
-  .hero-time { font-size: 40px; letter-spacing: -1.5px; }
+  .hero-time { font-size: 48px; letter-spacing: -2px; }
   .hero-date-line, .hero-lunar-line { font-size: 11.5px; }
   .cal-cell { min-height: 58px; }
   .cal-cell .day-num { font-size: 15px; }
   .cal-cell .day-label { font-size: 9px; }
-  .cal-cell .badge { font-size: 8.5px; line-height: 13px; min-width: 13px; top: 3px; right: 3px; }
   .moon-node .label { font-size: 8px; }
   .moon-node .icon { width: 20px; height: 20px; font-size: 13px; }
+  .year-progress-head .yp-left { display: none; }
+}
+
+/* 左列（窄列）内部元素自动缩一档 */
+@container (max-width: 320px) {
+  .hero-time { font-size: 44px; letter-spacing: -2px; margin-bottom: 14px; }
+  .hero-date-line, .hero-lunar-line { font-size: 12px; }
+  .hero-card { padding: 20px 16px 16px; }
+  .term-card, .moon-card, .festival-card { padding-left: 16px; padding-right: 16px; }
+  .term-name { font-size: 17px; }
+  .moon-visual { flex: 0 0 60px; height: 60px; font-size: 34px; }
+  .moon-name { font-size: 17px; }
+  .moon-node .icon { width: 22px; height: 22px; font-size: 14px; }
+  .moon-node .label { font-size: 9px; }
+  .fest-icon { flex: 0 0 34px; height: 34px; font-size: 17px; border-radius: 10px; }
+  .fest-name { font-size: 13.5px; }
+  .fest-days { font-size: 14px; }
   .year-progress-head .yp-left { display: none; }
 }
 
@@ -1021,10 +691,10 @@ html, body {
 }
 </style>
 </head>
-<body data-page-node-id="J7tRg4p9iwENZT0u1g2Iy8">
+<body>
 
-<div id="app" data-page-node-id="abtLdXLkTYjd5v78bEz6zp">
-  <div class="loading" data-page-node-id="8ng97OmEPlHwpgxcmSK8Hz"><div class="spinner" data-page-node-id="yeXHTCXGwtHXqjW6VihU9e"></div>正在加载 tyme4ts…</div>
+<div id="app">
+  <div class="loading"><div class="spinner"></div>正在加载 tyme4ts…</div>
 </div>
 
 <script type="module">
@@ -1050,7 +720,6 @@ const {
 
 const WEEK_START = 1;
 
-/* 开学时间：2026 年 8 月 24 日（JS 月份从 0 开始，7 = 8 月） */
 const SEMESTER = {
   start: new Date(2026, 7, 24),
   totalWeeks: 20,
@@ -1109,10 +778,9 @@ const PHASE_LIST = [
   { emoji: '🌘', name: '残月',   short: '残' },
 ];
 
-/* 月相轨道几何：8 个节点 → 7 段间隔，节点中心横跨 6.25% ~ 93.75% */
 const MOON_TRACK_LEFT = 6.25;
 const MOON_NODE_STEP  = 12.5;
-const MOON_SEGMENTS   = PHASE_LIST.length - 1;  // 7
+const MOON_SEGMENTS   = PHASE_LIST.length - 1;
 
 const PHASE_EMOJI = { '新月': '🌑', '蛾眉月': '🌒', '上弦月': '🌓', '盈凸月': '🌔', '满月': '🌕', '亏凸月': '🌖', '下弦月': '🌗', '残月': '🌘' };
 
@@ -1191,11 +859,10 @@ function isSameDay(a, b) { return a && b && a.getYear() === b.getYear() && a.get
 function getToday() { const n = new Date(); return { year: n.getFullYear(), month: n.getMonth() + 1, day: n.getDate(), hour: n.getHours(), minute: n.getMinutes() }; }
 
 /* ============================================================
- * 模块 3 · 数据模型层（多级缓存 + 计算/过滤分离）
+ * 模块 3 · 数据模型层
    ============================================================ */
 const Model = {
 
-  /* ---------- 缓存容器 ---------- */
   _c: {
     lunar: new Map(),
     dayInfo: new Map(),
@@ -1218,8 +885,6 @@ const Model = {
   _dayKey(solar) {
     return `${solar.getYear()}-${solar.getMonth()}-${solar.getDay()}`;
   },
-
-  /* ---------- 基础缓存 ---------- */
 
   getLunarAndCycle(solar) {
     const key = this._dayKey(solar);
@@ -1247,8 +912,6 @@ const Model = {
     this._c.dayInfo.set(key, v);
     return v;
   },
-
-  /* ---------- 日历网格 ---------- */
 
   buildGrid(year, month) {
     const key = `${year}-${month}`;
@@ -1307,8 +970,6 @@ const Model = {
     };
   },
 
-  /* ---------- 年度进度 ---------- */
-
   buildYearProgress(solar) {
     const key = this._dayKey(solar);
     let v = this._c.yearProgress.get(key);
@@ -1334,8 +995,6 @@ const Model = {
     this._c.yearProgress.set(key, v);
     return v;
   },
-
-  /* ---------- 节气 ---------- */
 
   buildTermAround(solar) {
     const key = this._dayKey(solar);
@@ -1395,8 +1054,6 @@ const Model = {
     this._c.term.set(key, v);
     return v;
   },
-
-  /* ---------- 节日（计算 / 过滤分离） ---------- */
 
   buildFestivals(solar, maxDays) {
     const key = this._dayKey(solar);
@@ -1509,8 +1166,6 @@ const Model = {
     return list;
   },
 
-  /* ---------- 月相 ---------- */
-
   buildPhase(solar, lunar) {
     const key = this._dayKey(solar);
     let v = this._c.phase.get(key);
@@ -1539,22 +1194,6 @@ const Model = {
       ? Math.min(1, Math.max(0, dayIdx / totalDays))
       : 0;
 
-    /* ------------------------------------------------------------------
-     * 进度条填充宽度
-     *
-     * 轨道结构：8 个相位节点均匀排布，每列宽 12.5%，
-     * 节点中心位置 = 6.25% + i × 12.5%（i = 0…7）。
-     * 填充线左端固定于第一个节点中心（6.25%）。
-     *
-     * 填充宽度由两部分组成：
-     *   基础宽度 = phaseIdx × 12.5%（从新月延伸到当前节点中心）
-     *   额外宽度 = inPhase × 12.5%（在当前相位内向下一节点延伸）
-     *
-     * 关键修正：额外宽度最多延伸到「下一节点中心 − ICON_HALF_PCT」，
-     * 其中 ICON_HALF_PCT ≈ 4.5%，约等于 28px 图标在一列（≈39.5px）中的
-     * 半径占比。这样填充线的右端始终在下一节点图标的左边缘前停止，
-     * 不会侵入图标内部（此前满月后尤其明显）。
-     * ------------------------------------------------------------------ */
     const ICON_HALF_PCT = 4.5;
 
     const baseWidth  = phaseIdx * MOON_NODE_STEP;
@@ -1579,8 +1218,6 @@ const Model = {
     this._c.phase.set(key, v);
     return v;
   },
-
-  /* ---------- 黄历 ---------- */
 
   buildAlmanac(solar, hour, minute) {
     const key = `${this._dayKey(solar)}-${hour}`;
@@ -1636,6 +1273,8 @@ const Model = {
 
 /* ============================================================
  * 模块 4 · 视图渲染层
+   宽容器两列：左列 = 时间/节气/月相/节日；右列 = 日历/黄历
+   窄容器单列：按顺序堆叠
    ============================================================ */
 const View = {
 
@@ -1917,7 +1556,7 @@ const View = {
             ${!isViewingToday ? `<button class="today-btn" data-nav="today">今天</button>` : ''}
             <button class="year-btn" data-nav="year-prev" aria-label="上一年" title="上一年">«</button>
             <button data-nav="-1" aria-label="上个月" title="上个月">‹</button>
-            <button data-nav="1" aria-label="下个月" title="下一个月">›</button>
+            <button data-nav="1" aria-label="下个月" title="下个月">›</button>
             <button class="year-btn" data-nav="year-next" aria-label="下一年" title="下一年">»</button>
           </div>
         </div>
@@ -1998,7 +1637,7 @@ const View = {
 };
 
 /* ============================================================
- * 模块 5 · 应用层（分层渲染 + 单定时器）
+ * 模块 5 · 应用层
    ============================================================ */
 const App = {
 
@@ -2025,13 +1664,11 @@ const App = {
     this._startClock();
   },
 
-  /* ---- 全量渲染：初始化 / 翻月 / 翻年 / 跨天 / 点击日期 ---- */
   render() {
     this.root.innerHTML = View.render(this.state);
     this._heroEl = null;
   },
 
-  /* ---- 局部渲染：仅重建「节日卡」---- */
   _renderFestivalsOnly() {
     const old = this.root.querySelector('.festival-card');
     if (!old) return;
@@ -2104,9 +1741,6 @@ const App = {
     });
   },
 
-  /* ============================================================
-   * 单定时器：setTimeout 自调度，对齐分钟边界
-   * ============================================================ */
   _startClock() {
     const tick = () => {
       const now = new Date();
@@ -2139,6 +1773,82 @@ const App = {
  * 模块 6 · 启动
    ============================================================ */
 App.init();
+
+/* ============================================================
+ * 模块 7 · 嵌入自适应（Hexo iframe 场景）
+ * ============================================================ */
+(function tightenEmbed() {
+  try {
+    const fe = window.frameElement;
+    if (!fe || !fe.style) return;
+
+    const parentWin = window.parent;
+    const csOf = (el) => parentWin.getComputedStyle(el);
+
+    const resetIframe = {
+      'display': 'block',
+      'width': '100%',
+      'max-width': '100%',
+      'min-width': '0',
+      'margin': '0',
+      'padding': '0',
+      'border': '0',
+      'float': 'none',
+      'position': 'static',
+      'left': 'auto',
+      'right': 'auto',
+      'top': 'auto',
+      'transform': 'none',
+      'vertical-align': 'top',
+      'box-sizing': 'border-box',
+    };
+    for (const k in resetIframe) {
+      fe.style.setProperty(k, resetIframe[k], 'important');
+    }
+
+    const CONTENT_PAT = /tab|pane|iframe|content|article|post|entry|markdown|inner|body|main|wrapper/i;
+
+    let el = fe.parentElement;
+    let depth = 0;
+    while (el && el.tagName !== 'HTML' && depth < 8) {
+      const cls = (
+        (typeof el.className === 'string' ? el.className : '') + ' ' + (el.id || '')
+      ).trim();
+      const cs = csOf(el);
+      const isContent = CONTENT_PAT.test(cls);
+
+      if ((parseFloat(cs.marginTop)  || 0) > 0) el.style.setProperty('margin-top',  '0', 'important');
+      if ((parseFloat(cs.paddingTop) || 0) > 0) el.style.setProperty('padding-top', '0', 'important');
+
+      if (isContent || (cs.maxWidth && cs.maxWidth !== 'none')) {
+        if (cs.maxWidth && cs.maxWidth !== 'none') {
+          el.style.setProperty('max-width', 'none', 'important');
+        }
+        if (cs.textAlign === 'center') {
+          el.style.setProperty('text-align', 'left', 'important');
+        }
+
+        const pl = parseFloat(cs.paddingLeft)  || 0;
+        const pr = parseFloat(cs.paddingRight) || 0;
+        if (pl > 0 && pl < 500) el.style.setProperty('padding-left',  '0', 'important');
+        if (pr > 0 && pr < 500) el.style.setProperty('padding-right', '0', 'important');
+
+        const ml = cs.marginLeft,  mr = cs.marginRight;
+        if (ml === 'auto' || (parseFloat(ml) || 0) > 0) {
+          el.style.setProperty('margin-left',  '0', 'important');
+        }
+        if (mr === 'auto' || (parseFloat(mr) || 0) > 0) {
+          el.style.setProperty('margin-right', '0', 'important');
+        }
+      }
+
+      el = el.parentElement;
+      depth++;
+    }
+
+    try { parentWin.scrollTo({ top: parentWin.scrollY, behavior: 'auto' }); } catch (_) {}
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>
