@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.pushiji.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="年轮 · 1985.1.26    *{box-sizing:border-box;}   html,body{margin:0;padding:0;}    #stage-wrap {     width:100%;     min-height:100vh;     display:flex;     align-items:center;     justify-content:c">
+    <meta name="description" content="年轮    *{box-sizing:border-box;}   html,body{margin:0;padding:0;}    #stage-wrap {     width:100%;     min-height:100vh;     display:flex;     align-items:center;     justify-content:center;     b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="吉度奇点">
 <meta property="og:url" content="https://blog.pushiji.top/schedule/rings.html">
 <meta property="og:site_name" content="吉度奇点">
-<meta property="og:description" content="年轮 · 1985.1.26    *{box-sizing:border-box;}   html,body{margin:0;padding:0;}    #stage-wrap {     width:100%;     min-height:100vh;     display:flex;     align-items:center;     justify-content:c">
+<meta property="og:description" content="年轮    *{box-sizing:border-box;}   html,body{margin:0;padding:0;}    #stage-wrap {     width:100%;     min-height:100vh;     display:flex;     align-items:center;     justify-content:center;     b">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-13T08:57:19.773Z">
-<meta property="article:modified_time" content="2026-10-13T08:57:19.773Z">
+<meta property="article:published_time" content="2026-10-15T09:09:49.208Z">
+<meta property="article:modified_time" content="2026-10-15T09:09:49.208Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -251,8 +251,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>年轮 · 1985.1.26</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>年轮</title>
 <style>
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -267,6 +267,7 @@
     overflow:hidden;
     font-family:"Songti SC","Noto Serif SC","STSong",serif;
     -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
     user-select:none;
     transition:background 1.6s ease;
   }
@@ -279,18 +280,34 @@
     margin:0 auto;
   }
 
+  /* 底部渐隐保护层：让动画不干扰最下面的文字 */
+  #stage::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:20%;
+    background:linear-gradient(to top,
+      rgba(5,2,0,.95) 0%,
+      rgba(5,2,0,.72) 42%,
+      rgba(5,2,0,.28) 72%,
+      rgba(5,2,0,0) 100%);
+    pointer-events:none;
+    z-index:4;
+  }
+
   #cv{
     display:block;
     width:100%;
     height:100%;
     cursor:crosshair;
     aspect-ratio:1/1;
+    touch-action:none;          /* 触屏拖动选区不触发页面滚动 */
   }
 
   .footer{
     position:absolute;left:50%;bottom:3.2%;
     transform:translateX(-50%);
-    text-align:center;pointer-events:none;z-index:5;
+    text-align:center;pointer-events:none;z-index:6;
     width:94%;
     transition:color 1.6s;
   }
@@ -298,26 +315,21 @@
   .meta{
     font-size:clamp(9.5px,.88vw,12px);
     letter-spacing:.18em;
-    color:rgba(255,215,175,.55);
+    color:rgba(255,215,175,.72);
+    text-shadow:0 1px 6px rgba(0,0,0,.95),0 0 18px rgba(0,0,0,.8);
     transition:color 1.6s;
     white-space:nowrap;
   }
 
   .meta .sep{margin:0 .7em;opacity:.38;}
-  .meta b{font-weight:600;color:hsla(32,85%,82%,.92);}
-
-  @media (max-width:640px){
-    .meta{white-space:normal;line-height:2;}
-    .meta .sep{display:none;}
-    .meta span{display:block;}
-  }
+  .meta b{font-weight:600;color:hsla(32,85%,82%,.95);}
 
   .plabel{
     position:fixed;top:0;left:0;
     pointer-events:none;z-index:40;
     padding:8px 14px 9px;
     border-radius:2px;
-    background:rgba(12,4,0,.72);
+    background:rgba(12,4,0,.78);
     backdrop-filter:blur(8px);
     -webkit-backdrop-filter:blur(8px);
     border-left:1px solid hsla(var(--h,30),100%,62%,.85);
@@ -357,17 +369,41 @@
   .themes:hover{opacity:1;}
 
   .themes button{
-    width9px;height:9px;border-radius:50%;
+    position:relative;
+    width:10px;height:10px;border-radius:50%;
     border:0;background:var(--c);cursor:pointer;padding:0;
     box-shadow:0 0 6px var(--c);
     opacity:.5;transition:opacity .3s, transform .3s;
   }
 
+  /* 扩大触屏点击热区（不改变视觉尺寸） */
+  .themes button::after{
+    content:"";position:absolute;inset:-9px;border-radius:50%;
+  }
+
   .themes button:hover{transform:scale(1.4);}
   .themes button.on{opacity:1;transform:scale(1.3);}
 
+  @media (max-width:640px){
+    #stage::after{height:24%;}
+
+    .footer{bottom:4.6%;width:88%;}
+
+    .meta{
+      white-space:normal;
+      line-height:1.9;
+    }
+    .meta .sep{display:none;}
+    .meta span{display:block;}
+
+    .plabel{padding:7px 11px 8px;}
+    .plabel .yr{font-size:15px;}
+    .plabel .dt{font-size:9px;letter-spacing:.18em;margin-top:4px;}
+  }
+
   @media (max-width:600px){
-    .themes{bottom:10px;right:10px;}
+    .themes{bottom:12px;right:12px;gap:12px;}
+    .themes button{width:11px;height:11px;}
   }
 </style>
 </head>
@@ -486,6 +522,8 @@
   let mx = -999, my = -999;
   let hoverIdx = -1;
   let prevHoverIdx = -1;
+  let labelDirty = false;
+  let touchMode = false;
   let stars = [];
   const flows = [];
   const bursts = [];
@@ -602,7 +640,7 @@
   function applyTheme(key) {
     TH = THEMES[key];
     stageWrap.style.background = TH.bg;
-    meta.style.color = `hsla(${TH.hue0 + 4},42%,72%,.55)`;
+    meta.style.color = `hsla(${TH.hue0 + 4},42%,78%,.72)`;
     Array.prototype.forEach.call(themesEl.children, function (b) {
       const on = b.dataset.k === key;
       b.classList.toggle('on', on);
@@ -617,6 +655,7 @@
     const b = document.createElement('button');
     b.dataset.k = k;
     b.title = THEMES[k].name;
+    b.setAttribute('aria-label', THEMES[k].name);
     b.style.setProperty('--c', THEMES[k].dot);
     b.addEventListener('click', function () { applyTheme(k); });
     themesEl.appendChild(b);
@@ -636,9 +675,11 @@
     cv.style.height = H + 'px';
 
     cx = W / 2;
-    cy = H / 2 - H * 0.028;
 
-    maxR   = Math.min(W, H) * 0.46;
+    /* —— 关键：为底部文字预留空间，圆盘整体上移并略微缩小 —— */
+    const reserve = Math.min(56, H * 0.11);      // 底部文字保留区
+    cy = (H - reserve) / 2;
+    maxR = Math.min(W * 0.455, (H - reserve) * 0.475);
     innerR = Math.max(10, maxR * 0.045);
 
     const k = (maxR - innerR) / totalW;
@@ -1034,6 +1075,33 @@
     ctx.restore();
   }
 
+  /* —— 标签定位：自动避让屏幕边缘，触屏时跟随手指上方 —— */
+  function placeLabel() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const pad = 10;
+    const w = plabel.offsetWidth  || 90;
+    const h = plabel.offsetHeight || 46;
+
+    let x, y;
+    if (touchMode) {
+      x = mx - w / 2;
+      y = my - h - 34;                 // 手指上方
+      if (y < pad) y = my + 40;        // 顶部放不下就翻到下方
+    } else {
+      x = mx + 22;
+      y = my - 26;
+      if (x + w > vw - pad) x = mx - w - 22;
+      if (y < pad) y = my + 26;
+    }
+
+    x = clamp(x, pad, Math.max(pad, vw - w - pad));
+    y = clamp(y, pad, Math.max(pad, vh - h - pad));
+
+    plabel.style.transform =
+      `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+  }
+
   function updateLabel() {
     if (hoverIdx < 0) {
       plabel.classList.remove('show');
@@ -1041,12 +1109,16 @@
     }
     const yr = START_YEAR + hoverIdx;
     const hue = hueAt(hoverIdx / ((N - 1) || 1));
-    plYr.textContent = yr;
-    plDt.textContent = hoverIdx === 0
-      ? '起 点'
-      : (yr - START_YEAR) + ' 岁';
+    const sub = hoverIdx === 0 ? '起 点' : (yr - START_YEAR) + ' 岁';
+
+    if (plYr.textContent !== String(yr)) plYr.textContent = yr;
+    if (plDt.textContent !== sub)      plDt.textContent = sub;
     plabel.style.setProperty('--h', hue.toFixed(1));
-    plabel.style.transform = `translate(${mx + 22}px, ${my - 26}px)`;
+
+    if (labelDirty || !plabel.classList.contains('show')) {
+      placeLabel();
+      labelDirty = false;
+    }
     plabel.classList.add('show');
   }
 
@@ -1101,45 +1173,77 @@
         }
       }
       prevHoverIdx = hoverIdx;
+      labelDirty = true;
     }
 
     updateLabel();
     requestAnimationFrame(frame);
   }
 
-  function onPointerMove(e) {
+  function pickAt(clientX, clientY) {
+    if (!radii.length) return -1;
     const rect = cv.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    mx = e.clientX;
-    my = e.clientY;
-    twx = ((x / rect.width)  * 2 - 1) * 12;
-    twy = ((y / rect.height) * 2 - 1) * 12;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
     const dx = x - (cx + wx);
     const dy = y - (cy + wy);
     const d  = Math.sqrt(dx * dx + dy * dy);
 
-    hoverIdx = -1;
-    if (d >= radii[0] && d <= radii[N]) {
-      let lo = 0, hi = N - 1;
-      while (lo <= hi) {
-        const mid = (lo + hi) >> 1;
-        if (d < radii[mid]) hi = mid - 1;
-        else if (d >= radii[mid + 1]) lo = mid + 1;
-        else { hoverIdx = mid; break; }
-      }
+    if (d < radii[0] || d > radii[N]) return -1;
+
+    let lo = 0, hi = N - 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (d < radii[mid]) hi = mid - 1;
+      else if (d >= radii[mid + 1]) lo = mid + 1;
+      else return mid;
     }
+    return -1;
+  }
+
+  function onPointerMove(e) {
+    touchMode = (e.pointerType === 'touch');
+    const rect = cv.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    mx = e.clientX;
+    my = e.clientY;
+
+    twx = ((x / rect.width)  * 2 - 1) * 12;
+    twy = ((y / rect.height) * 2 - 1) * 12;
+
+    hoverIdx = pickAt(e.clientX, e.clientY);
+    labelDirty = true;
   }
 
   cv.addEventListener('pointermove', onPointerMove, { passive: true });
-  cv.addEventListener('pointerleave', function () { hoverIdx = -1; }, { passive: true });
+
+  /* 触屏：按下即选中，抬起后保持显示（不因 pointerleave 被清掉） */
+  cv.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'touch') return;
+    onPointerMove(e);
+  }, { passive: true });
+
+  cv.addEventListener('pointerleave', function (e) {
+    if (e.pointerType === 'touch') return;   // 触屏不做清除
+    hoverIdx = -1;
+    labelDirty = true;
+  }, { passive: true });
+
+  cv.addEventListener('pointercancel', function () {
+    if (!touchMode) { hoverIdx = -1; labelDirty = true; }
+  }, { passive: true });
 
   if (window.ResizeObserver) {
     new ResizeObserver(function () { layout(); }).observe(stage);
   } else {
     window.addEventListener('resize', layout);
   }
+  window.addEventListener('resize', function () {
+    if (hoverIdx >= 0) { labelDirty = true; }
+  });
 
   layout();
   applyTheme('kiln');
