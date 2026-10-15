@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-15T06:26:39.026Z">
-<meta property="article:modified_time" content="2026-10-15T06:26:39.026Z">
+<meta property="article:published_time" content="2026-10-15T06:52:44.249Z">
+<meta property="article:modified_time" content="2026-10-15T06:52:44.249Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -564,7 +564,7 @@ html, body {
 .day-val .emph { color: var(--red); font-weight: 600; }
 .day-val .dim { color: var(--text-sub); }
 
-/* 彭祖百忌单元格：每句话占一行 */
+/* 彭祖百忌单元格：桌面默认两句各占一行 */
 .day-cell.pengzu-cell { text-align: left; }
 .day-cell.pengzu-cell .day-val {
   font-size: 12px;
@@ -720,24 +720,49 @@ html, body {
   .day-cell { padding: 10px 4px; gap: 4px; }
   .day-key { font-size: 10.5px; letter-spacing: .3px; }
   .day-val { font-size: 11.5px; line-height: 1.4; }
-  .day-cell.pengzu-cell .day-val { font-size: 11px; line-height: 1.5; }
 
   /* 重排顺序：
      1) 喜神/财神/福神/贵神 相邻
-     2) 彭祖百忌 跨两列放到最后（紧邻 12 时辰前）
+     2) 五行、廿八宿移到胎神上方
+     3) 彭祖百忌 跨两列放到最后（紧邻 12 时辰前）
      —— 使用 order 属性，不改变 DOM 结构 */
   .day-cell:nth-child(1)  { order: 1; }                       /* 黑道 */
   .day-cell:nth-child(2)  { order: 2; }                       /* 十二神 */
   .day-cell:nth-child(3)  { order: 3; }                       /* 幸运生肖 */
   .day-cell:nth-child(4)  { order: 4; }                       /* 冲煞 */
-  .day-cell:nth-child(5)  { order: 5; grid-column: 1 / -1; }  /* 胎神（跨两列） */
-  .day-cell:nth-child(6)  { order: 6; }                       /* 喜神 */
-  .day-cell:nth-child(7)  { order: 7; }                       /* 财神 */
-  .day-cell:nth-child(10) { order: 8; }                       /* 福神 */
-  .day-cell:nth-child(11) { order: 9; }                       /* 贵神 */
-  .day-cell:nth-child(8)  { order: 10; }                      /* 五行 */
-  .day-cell:nth-child(12) { order: 11; }                      /* 廿八宿 */
+  .day-cell:nth-child(8)  { order: 5; }                       /* 五行 */
+  .day-cell:nth-child(12) { order: 6; }                       /* 廿八宿 */
+  .day-cell:nth-child(5)  { order: 7; grid-column: 1 / -1; }  /* 胎神（跨两列） */
+  .day-cell:nth-child(6)  { order: 8; }                       /* 喜神 */
+  .day-cell:nth-child(7)  { order: 9; }                       /* 财神 */
+  .day-cell:nth-child(10) { order: 10; }                      /* 福神 */
+  .day-cell:nth-child(11) { order: 11; }                      /* 贵神 */
   .day-cell:nth-child(9)  { order: 12; grid-column: 1 / -1; } /* 彭祖百忌（跨两列，最后一行） */
+
+  /* 手机端彭祖百忌：两句合到一行 */
+  .day-cell.pengzu-cell { text-align: center; }
+  .day-cell.pengzu-cell .day-val {
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .pengzu-val {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+  }
+  .pengzu-val > div {
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  /* 两句之间的分隔符 */
+  .pengzu-val > div + div::before {
+    content: ' · ';
+    color: var(--text-sub);
+    margin: 0 2px;
+  }
 
   /* ---------- 12 时辰：一行显示，不够则横向滚动 ---------- */
   .hour-strip {
@@ -2074,10 +2099,18 @@ const App = {
         return;
       }
 
+      /* 点击时辰：
+         1) 切换 .selected 类（不重建 DOM，避免 12 时辰行滚动位置被重置）
+         2) 只重建时辰详情卡 */
       const hourChip = e.target.closest('[data-hour-idx]');
       if (hourChip) {
-        this.state.selectedHour = +hourChip.dataset.hourIdx;
-        this._renderAlmanacAndHour();
+        const idx = +hourChip.dataset.hourIdx;
+        this.state.selectedHour = idx;
+        this.root.querySelectorAll('.hour-chip').forEach(chip => {
+          chip.classList.toggle('selected', +chip.dataset.hourIdx === idx);
+        });
+        const oldHour = this.root.querySelector('.hour-card');
+        if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state);
         return;
       }
 
@@ -2091,17 +2124,6 @@ const App = {
         this.render();
       }
     });
-  },
-
-  _renderAlmanacAndHour() {
-    const oldAlm = this.root.querySelector('.almanac-card');
-    const oldHour = this.root.querySelector('.hour-card');
-    if (oldAlm) oldAlm.outerHTML = View.renderAlmanac(this.state);
-    if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state);
-    else if (oldAlm) {
-      const page = this.root.querySelector('.col-right') || this.root.querySelector('.page');
-      if (page) page.insertAdjacentHTML('beforeend', View.renderHourCard(this.state));
-    }
   },
 
   _startClock() {
