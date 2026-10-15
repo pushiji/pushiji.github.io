@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-14T09:24:51.054Z">
-<meta property="article:modified_time" content="2026-10-14T09:24:51.054Z">
+<meta property="article:published_time" content="2026-10-15T00:24:13.640Z">
+<meta property="article:modified_time" content="2026-10-15T00:24:13.640Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -288,11 +288,10 @@ html, body {
   min-height: 100vh;
 }
 
-/* 容器查询锚点：让 @container 跟随 #app（iframe）实际宽度响应式 */
 #app { width: 100%; container-type: inline-size; }
 
 /* ============================================================
-   默认单列
+   页面布局（默认单列）
    ============================================================ */
 .page {
   max-width: 1220px;
@@ -302,23 +301,18 @@ html, body {
   flex-direction: column;
   gap: 12px;
 }
-/* 单列时，让 .col-left / .col-right 透明，内部卡片直接成为 .page 子项 */
 .col-left, .col-right { display: contents; }
-
 .card { background: var(--card); border-radius: var(--radius-card); box-shadow: var(--shadow); overflow: hidden; width: 100%; }
 .page > .card { width: 100%; min-width: 0; }
 
-/* ============================================================
-   卡片排序（全局生效）
-   单列：时间 → 日历 → 节气 → 月相 → 节日 → 黄历
-   两列：左列 时间/节气/月相/节日；右列 日历/黄历（顺序不变）
-   ============================================================ */
+/* 卡片排序 */
 .hero-card     { order: 1; }
 .calendar-card { order: 2; }
 .term-card     { order: 3; }
 .moon-card     { order: 4; }
 .festival-card { order: 5; }
 .almanac-card  { order: 6; }
+.hour-card     { order: 7; }
 
 .section-title { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5160; font-weight: 600; letter-spacing: .5px; margin-bottom: 16px; }
 .section-title .bar { width: 3px; height: 14px; border-radius: 2px; }
@@ -327,11 +321,7 @@ html, body {
 .section-title .bar.red    { background: linear-gradient(180deg, var(--red), var(--orange)); }
 .section-title .count { margin-left: auto; font-size: 11px; color: var(--text-light); background: #f4f5f7; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: 0; }
 
-/* ============================================================
-   容器宽 ≥ 640px 时 → 两列
-   左列 = 时间卡 / 节气卡 / 月相卡 / 节日卡
-   右列 = 日历卡 / 黄历卡
-   ============================================================ */
+/* 容器宽 ≥ 640px 时 → 两列 */
 @container (min-width: 640px) {
   .page {
     display: grid;
@@ -339,14 +329,7 @@ html, body {
     gap: 12px;
     align-items: start;
   }
-  .col-left {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
-    container-type: inline-size;
-  }
-  .col-right {
+  .col-left, .col-right {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -490,11 +473,11 @@ html, body {
 .cal-nav button.year-btn:hover { color: var(--blue); background: var(--blue-soft); }
 .cal-nav button.today-btn { min-width: auto; padding: 0 12px; font-size: 12.5px; font-weight: 600; color: var(--red); background: var(--red-soft); }
 .cal-nav button.today-btn:hover { background: #fbe3e3; }
-.cal-dow-row { display: grid; grid-template-columns: repeat(7, 1fr); padding-bottom: 6px; }
+.cal-dow-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); padding-bottom: 6px; }
 .cal-dow { text-align: center; font-size: 13px; font-weight: 500; color: var(--text-sub); padding: 6px 0 10px; letter-spacing: .5px; }
 .cal-dow.weekend { color: var(--red); }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-.cal-cell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 2px; min-height: 74px; border-radius: var(--radius-cell); cursor: pointer; transition: background .12s ease, box-shadow .15s ease; user-select: none; contain: layout style; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.cal-cell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 2px; min-height: 74px; border-radius: var(--radius-cell); cursor: pointer; transition: background .12s ease, box-shadow .15s ease; user-select: none; contain: layout style; min-width: 0; }
 .cal-cell:hover { background: #f7f8fa; }
 .cal-cell.other-month { opacity: .28; pointer-events: none; }
 .cal-cell .day-num { font-size: 19px; font-weight: 600; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -.4px; }
@@ -529,9 +512,10 @@ html, body {
 .cal-cell.today .moon-dot { background: rgba(255, 255, 255, .8) !important; }
 
 /* ============================================================
-   模块 6 · 黄历详情卡
+   模块 6 · 黄历详情卡（新版 4×3 网格）
    ============================================================ */
-.almanac-card { padding: 24px 26px; }
+.almanac-card { padding: 20px 22px 20px; }
+
 .yiji-list { padding: 0 0 18px; border-bottom: 1px dashed var(--line-dark); }
 .yiji-row { display: flex; gap: 12px; padding: 6px 0; align-items: flex-start; }
 .yiji-row + .yiji-row { padding-top: 12px; }
@@ -540,33 +524,105 @@ html, body {
 .yiji-icon.j { background: linear-gradient(135deg, #e05858, var(--red)); }
 .yiji-body { flex: 1; font-size: 13.5px; color: #303640; line-height: 1.9; }
 .yiji-body .tag { display: inline-block; margin-right: 10px; white-space: nowrap; }
-.triple-row { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 0; border-bottom: 1px dashed var(--line-dark); }
-.triple-cell { text-align: center; padding: 0 10px; border-right: 1px solid var(--line); }
-.triple-cell:last-child { border-right: none; }
-.triple-key { font-size: 11.5px; color: var(--text-light); margin-bottom: 6px; letter-spacing: .5px; }
-.triple-val { font-size: 14px; color: #303640; font-weight: 500; }
-.triple-val.red { color: var(--red); }
-.hours-section { padding: 18px 0; border-bottom: 1px dashed var(--line-dark); }
-.hours-title { font-size: 12px; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-bottom: 12px; }
-.hours-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 -26px; padding: 0 26px; }
-.hours-scroll::-webkit-scrollbar { display: none; }
-.hours-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 100%; }
-.hour-cell { background: #fff; padding: 9px 2px; text-align: center; position: relative; }
-.hour-cell.now { background: linear-gradient(180deg, #eef3fc, #f6f9ff); }
-.hour-cell.now::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--blue); }
-.hour-cell .hz { font-size: 13px; font-weight: 600; color: var(--text); }
-.hour-cell .gz { font-size: 10.5px; color: var(--text-light); margin: 3px 0; line-height: 1.2; }
-.hour-cell .jl { font-size: 11px; font-weight: 700; }
-.hour-cell .jl.y { color: var(--green); }
-.hour-cell .jl.n { color: var(--red); }
-.quad { display: grid; grid-template-columns: 90px 1fr 1fr 1fr; padding-top: 18px; }
-.quad-cell { padding: 4px 12px; border-right: 1px solid var(--line); text-align: center; }
-.quad-cell:last-child { border-right: none; }
-.quad-key { font-size: 11.5px; color: var(--text-light); margin-bottom: 8px; letter-spacing: .5px; }
-.quad-val { font-size: 12.5px; color: #4a5160; line-height: 1.7; }
-.duty-big { font-size: 26px; font-weight: 700; color: #303640; letter-spacing: 4px; line-height: 1; }
-.pengzu { grid-column: 1 / -1; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line-dark); text-align: center; font-size: 12.5px; color: #4a5160; }
-.pengzu .lbl { display: inline-block; color: var(--red); font-weight: 600; margin-right: 8px; padding: 1px 8px; border-radius: 10px; background: var(--red-soft); font-size: 11px; }
+
+/* 4×3 日级别信息网格 */
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+.day-cell {
+  background: #fff;
+  padding: 12px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+.day-key {
+  font-size: 11.5px;
+  color: var(--text-light);
+  letter-spacing: .5px;
+  line-height: 1.2;
+}
+.day-val {
+  font-size: 13px;
+  color: #303640;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: break-word;
+  max-width: 100%;
+}
+.day-val.red { color: var(--red); }
+.day-val .emph { color: var(--red); font-weight: 600; }
+.day-val .dim { color: var(--text-sub); }
+
+/* 彭祖百忌单元格（完整内容，可换行） */
+.day-cell.pengzu-cell { text-align: left; }
+.day-cell.pengzu-cell .day-val { font-size: 12px; line-height: 1.6; text-align: left; }
+
+/* 十二时辰行 */
+.hour-strip {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.hour-chip {
+  background: #fff;
+  padding: 10px 2px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s ease;
+  min-width: 0;
+}
+.hour-chip:hover { background: #f7f8fa; }
+.hour-chip .hz { font-size: 13px; font-weight: 600; color: var(--text); }
+.hour-chip .gz { font-size: 10.5px; color: var(--text-light); margin: 3px 0; line-height: 1.2; }
+.hour-chip .jl { font-size: 11px; font-weight: 700; }
+.hour-chip .jl.y { color: var(--green); }
+.hour-chip .jl.n { color: var(--red); }
+.hour-chip.now { background: linear-gradient(180deg, #eef3fc, #f6f9ff); }
+.hour-chip.now::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--blue); }
+.hour-chip.selected { background: linear-gradient(180deg, #e9eefb, #f2f5fe); box-shadow: inset 0 0 0 2px rgba(91,114,201,.5); }
+
+/* ============================================================
+   模块 7 · 时辰详情卡（新）
+   ============================================================ */
+.hour-card { padding: 22px 22px 20px; }
+.hour-card-head { text-align: center; margin-bottom: 18px; }
+.hour-card-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
+.hour-card-title .luck-x { color: var(--red); }
+.hour-card-title .luck-j { color: var(--green); }
+.hour-card-time { font-size: 13px; color: var(--text-sub); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+.hour-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.hour-detail-cell {
+  background: #faf6ee;
+  border-radius: 10px;
+  padding: 12px 6px;
+  text-align: center;
+  min-width: 0;
+}
+.hour-detail-key { font-size: 12px; color: #4a5160; margin-bottom: 8px; line-height: 1.3; }
+.hour-detail-val { font-size: 13px; color: var(--text-sub); font-weight: 500; line-height: 1.4; word-break: break-word; }
 
 /* 加载 / 错误 */
 .loading { text-align: center; padding: 120px 20px; color: var(--text-sub); font-size: 13px; }
@@ -575,14 +631,21 @@ html, body {
 .err { padding: 14px 18px; background: #fef2f2; color: #b91c1c; border-radius: 12px; font-size: 13px; text-align: center; max-width: 500px; margin: 40px auto; }
 
 /* ============================================================
-   尺寸微调（窄宽度下压缩内部元素）
+   响应式尺寸微调（只保留 @container，避免与 @media 重复）
    ============================================================ */
-@media (max-width: 560px) {
+@container (max-width: 560px) {
   .page { padding: 12px 10px 30px; }
   .hero-card { padding: 28px 18px 20px; }
   .hero-time { font-size: 56px; letter-spacing: -3px; margin-bottom: 18px; }
-  .hero-date-line, .hero-lunar-line { font-size: 12.5px; letter-spacing: .2px; }
-  .hero-lunar-line { margin-bottom: 16px; }
+  .hero-date-line { font-size: 12.5px; letter-spacing: .2px; }
+  .hero-lunar-line {
+    font-size: clamp(10px, 3.4vw, 12.5px);
+    white-space: nowrap;
+    word-break: keep-all;
+    letter-spacing: 0;
+    margin-bottom: 16px;
+  }
+
   .year-progress { padding-top: 14px; }
   .year-progress-head { min-height: 16px; margin-bottom: 2px; }
   .year-progress-head .yp-label { gap: 5px; font-size: 11px; }
@@ -593,6 +656,7 @@ html, body {
   .year-progress-percent { font-size: 11.5px; }
   .year-progress-marker { top: 20px; width: 11px; height: 11px; border-width: 2px; }
   .year-progress-footer { font-size: 9.5px; margin-top: 5px; }
+
   .term-card { padding: 16px 18px; }
   .term-head { margin-bottom: 14px; }
   .term-season-tag { font-size: 10.5px; padding: 2px 8px; }
@@ -601,6 +665,7 @@ html, body {
   .term-hou { font-size: 12px; padding-top: 12px; margin-top: 12px; gap: 8px; }
   .hou-title { font-size: 10.5px; padding: 1px 7px; }
   .hou-progress { font-size: 11.5px; }
+
   .moon-card { padding: 16px 18px; }
   .moon-visual { flex: 0 0 68px; height: 68px; font-size: 40px; }
   .moon-name { font-size: 18px; }
@@ -610,11 +675,13 @@ html, body {
   .moon-track::before { top: 18px; }
   .moon-track-fill { top: 18px; }
   .moon-node.active .icon { transform: scale(1.12); }
+
   .festival-card { padding: 16px 18px 10px; }
   .fest-icon { flex: 0 0 36px; height: 36px; font-size: 18px; border-radius: 10px; }
   .fest-name { font-size: 14px; }
   .fest-days { font-size: 15px; }
   .fest-scroll { margin: 0 -18px; padding: 0 18px; }
+
   .calendar-card { padding: 16px 10px 12px; }
   .cal-header { padding-bottom: 12px; gap: 6px; }
   .cal-title { font-size: 17px; gap: 4px; }
@@ -628,23 +695,36 @@ html, body {
   .cal-cell { min-height: 66px; padding: 8px 1px; border-radius: 10px; }
   .cal-cell .day-num { font-size: 16.5px; }
   .cal-cell .day-label { font-size: 9.5px; margin-top: 5px; }
-  .almanac-card { padding: 20px 18px; }
+
+  .almanac-card { padding: 20px 14px; }
   .yiji-body { font-size: 12.5px; }
   .yiji-body .tag { margin-right: 8px; }
-  .hours-scroll { margin: 0 -18px; padding: 0 18px; }
-  .hours-grid { display: flex; min-width: max-content; gap: 1px; }
-  .hour-cell { flex: 0 0 52px; padding: 8px 4px; }
-  .hour-cell .hz { font-size: 12.5px; }
-  .hour-cell .gz { font-size: 10px; }
-  .quad { grid-template-columns: 1fr 1fr; gap: 0; }
-  .quad-cell { padding: 8px 8px; border-right: none; }
-  .quad-cell:nth-child(1), .quad-cell:nth-child(2) { border-bottom: 1px dashed var(--line-dark); }
-  .duty-big { font-size: 22px; }
+
+  .day-grid { gap: 1px; margin-top: 14px; }
+  .day-cell { padding: 10px 4px; gap: 4px; }
+  .day-key { font-size: 10.5px; letter-spacing: .3px; }
+  .day-val { font-size: 11.5px; line-height: 1.4; }
+  .day-cell.pengzu-cell .day-val { font-size: 11px; line-height: 1.5; }
+
+  .hour-strip { gap: 1px; margin-top: 10px; }
+  .hour-chip { padding: 8px 1px; }
+  .hour-chip .hz { font-size: 12.5px; }
+  .hour-chip .gz { font-size: 10px; margin: 2px 0; }
+  .hour-chip .jl { font-size: 10.5px; }
+
+  .hour-card { padding: 18px 14px; }
+  .hour-card-title { font-size: 19px; }
+  .hour-card-time { font-size: 12px; }
+  .hour-detail-grid { gap: 6px; }
+  .hour-detail-cell { padding: 10px 4px; }
+  .hour-detail-key { font-size: 11px; margin-bottom: 6px; }
+  .hour-detail-val { font-size: 12px; }
 }
 
-@media (max-width: 360px) {
+@container (max-width: 360px) {
   .hero-time { font-size: 48px; letter-spacing: -2px; }
-  .hero-date-line, .hero-lunar-line { font-size: 11.5px; }
+  .hero-date-line { font-size: 11.5px; }
+  .hero-lunar-line { font-size: clamp(9px, 3.2vw, 11.5px); }
   .cal-cell { min-height: 58px; }
   .cal-cell .day-num { font-size: 15px; }
   .cal-cell .day-label { font-size: 9px; }
@@ -652,39 +732,19 @@ html, body {
   .moon-node .label { font-size: 8px; }
   .moon-node .icon { width: 20px; height: 20px; font-size: 13px; }
   .year-progress-head .yp-left { display: none; }
+
+  .day-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .day-cell.pengzu-cell { grid-column: 1 / -1; }
+  .day-val { font-size: 11px; }
+
+  .hour-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .hour-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* 按 #app 容器宽度做微调（iframe 场景更准） */
-@container (max-width: 560px) {
-  .hero-time { font-size: 56px; letter-spacing: -3px; }
-  .calendar-card { padding: 16px 10px 12px; }
-  .cal-cell { min-height: 66px; padding: 8px 1px; border-radius: 10px; }
-  .cal-cell .day-num { font-size: 16.5px; }
-  .cal-cell .day-label { font-size: 9.5px; margin-top: 5px; }
-  .almanac-card { padding: 20px 18px; }
-  .hours-grid { display: flex; min-width: max-content; gap: 1px; }
-  .hour-cell { flex: 0 0 52px; padding: 8px 4px; }
-  .quad { grid-template-columns: 1fr 1fr; gap: 0; }
-  .quad-cell { padding: 8px 8px; border-right: none; }
-  .quad-cell:nth-child(1), .quad-cell:nth-child(2) { border-bottom: 1px dashed var(--line-dark); }
-  .duty-big { font-size: 22px; }
-}
-
-@container (max-width: 360px) {
-  .hero-time { font-size: 48px; letter-spacing: -2px; }
-  .hero-date-line, .hero-lunar-line { font-size: 11.5px; }
-  .cal-cell { min-height: 58px; }
-  .cal-cell .day-num { font-size: 15px; }
-  .cal-cell .day-label { font-size: 9px; }
-  .moon-node .label { font-size: 8px; }
-  .moon-node .icon { width: 20px; height: 20px; font-size: 13px; }
-  .year-progress-head .yp-left { display: none; }
-}
-
-/* 左列（窄列）内部元素自动缩一档 */
 @container (max-width: 320px) {
   .hero-time { font-size: 44px; letter-spacing: -2px; margin-bottom: 14px; }
-  .hero-date-line, .hero-lunar-line { font-size: 12px; }
+  .hero-date-line { font-size: 12px; }
+  .hero-lunar-line { font-size: clamp(9px, 3vw, 11px); }
   .hero-card { padding: 20px 16px 16px; }
   .term-card, .moon-card, .festival-card { padding-left: 16px; padding-right: 16px; }
   .term-name { font-size: 17px; }
@@ -722,8 +782,7 @@ try {
 }
 
 const {
-  SolarDay, SolarTime, SolarMonth, SolarYear, LunarYear, LunarDay, LunarHour,
-  SixtyCycle, LegalHoliday, Week,
+  SolarDay, SolarTime, SolarMonth, SolarYear, SixtyCycle, LegalHoliday, Week,
 } = T;
 
 /* ============================================================
@@ -759,7 +818,6 @@ const WEEK_LABELS = (() => {
 })();
 
 const WEEK_NAME_STANDARD = ['日', '一', '二', '三', '四', '五', '六'];
-
 function getWeekCn(solar) {
   const idx = safe(() => solar.getWeek().getIndex(), null);
   if (idx == null) return '—';
@@ -776,8 +834,29 @@ function yearToChinese(year) {
   return String(year).split('').map(d => digits[+d] || '').join('');
 }
 
-const PENGZU_STEM = { '甲': '甲不开仓财物耗散', '乙': '乙不栽植千株不长', '丙': '丙不修灶必见灾殃', '丁': '丁不剃头头必生疮', '戊': '戊不受田田主不祥', '己': '己不破券二比并亡', '庚': '庚不经络织机虚张', '辛': '辛不合酱主人不尝', '壬': '壬不泱水更难提防', '癸': '癸不词讼理弱敌强' };
-const PENGZU_BRANCH = { '子': '子不问卜自惹祸殃', '丑': '丑不冠带主不还乡', '寅': '寅不祭祀神鬼不尝', '卯': '卯不穿井水泉不香', '辰': '辰不哭泣必主重丧', '巳': '巳不远行财物伏藏', '午': '午不苫盖屋主更张', '未': '未不服药毒气入肠', '申': '申不安床鬼祟入房', '酉': '酉不会客醉坐颠狂', '戌': '戌不吃犬作怪上床', '亥': '亥不嫁娶不利新郎' };
+/* 天干/地支五行 */
+const STEM_ELEMENT = {
+  '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+  '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+};
+const BRANCH_ELEMENT = {
+  '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火',
+  '午': '火', '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水',
+};
+
+/* 彭祖百忌 */
+const PENGZU_STEM = {
+  '甲': '甲不开仓财物耗散', '乙': '乙不栽植千株不长', '丙': '丙不修灶必见灾殃',
+  '丁': '丁不剃头头必生疮', '戊': '戊不受田田主不祥', '己': '己不破券二比并亡',
+  '庚': '庚不经络织机虚张', '辛': '辛不合酱主人不尝', '壬': '壬不泱水更难提防',
+  '癸': '癸不词讼理弱敌强',
+};
+const PENGZU_BRANCH = {
+  '子': '子不问卜自惹祸殃', '丑': '丑不冠带主不还乡', '寅': '寅不祭祀神鬼不尝',
+  '卯': '卯不穿井水泉不香', '辰': '辰不哭泣必主重丧', '巳': '巳不远行财物伏藏',
+  '午': '午不苫盖屋主更张', '未': '未不服药毒气入肠', '申': '申不安床鬼祟入房',
+  '酉': '酉不会客醉坐颠狂', '戌': '戌不吃犬作怪上床', '亥': '亥不嫁娶不利新郎',
+};
 
 const PHASE_LIST = [
   { emoji: '🌑', name: '新月',   short: '新' },
@@ -790,14 +869,58 @@ const PHASE_LIST = [
   { emoji: '🌘', name: '残月',   short: '残' },
 ];
 
-const MOON_TRACK_LEFT = 6.25;
-const MOON_NODE_STEP  = 12.5;
-const MOON_SEGMENTS   = PHASE_LIST.length - 1;
+const MOON_NODE_STEP = 12.5;
+const MOON_SEGMENTS  = PHASE_LIST.length - 1;
 
 const PHASE_EMOJI = { '新月': '🌑', '蛾眉月': '🌒', '上弦月': '🌓', '盈凸月': '🌔', '满月': '🌕', '亏凸月': '🌖', '下弦月': '🌗', '残月': '🌘' };
 
-const BRANCH_OPPOSITE = { '子':'午','丑':'未','寅':'申','卯':'酉','辰':'戌','巳':'亥','午':'子','未':'丑','申':'寅','酉':'卯','戌':'辰','亥':'巳' };
-const BRANCH_SHA = { '申':'南','子':'南','辰':'南','寅':'北','午':'北','戌':'北','巳':'东','酉':'东','丑':'东','亥':'西','卯':'西','未':'西' };
+/* 地支冲、煞方位 */
+const BRANCH_OPPOSITE = {
+  '子':'午','丑':'未','寅':'申','卯':'酉','辰':'戌','巳':'亥',
+  '午':'子','未':'丑','申':'寅','酉':'卯','戌':'辰','亥':'巳',
+};
+const BRANCH_SHA = {
+  '申':'南','子':'南','辰':'南','寅':'北','午':'北','戌':'北',
+  '巳':'东','酉':'东','丑':'东','亥':'西','卯':'西','未':'西',
+};
+/* 地支对应生肖 */
+const BRANCH_ZODIAC = {
+  '子':'鼠','丑':'牛','寅':'虎','卯':'兔','辰':'龙','巳':'蛇',
+  '午':'马','未':'羊','申':'猴','酉':'鸡','戌':'狗','亥':'猪',
+};
+/* 六合、三合（用于幸运生肖） */
+const SIX_HARMONY = {
+  '子':'丑','丑':'子','寅':'亥','亥':'寅','卯':'戌','戌':'卯',
+  '辰':'酉','酉':'辰','巳':'申','申':'巳','午':'未','未':'午',
+};
+const THREE_HARMONY = {
+  '申':['子','辰'], '子':['申','辰'], '辰':['申','子'],
+  '亥':['卯','未'], '卯':['亥','未'], '未':['亥','卯'],
+  '寅':['午','戌'], '午':['寅','戌'], '戌':['寅','午'],
+  '巳':['酉','丑'], '酉':['巳','丑'], '丑':['巳','酉'],
+};
+
+/* 十二神黄道集合 */
+const YELLOW_STARS = new Set(['青龙', '明堂', '金匮', '天德', '玉堂', '司命']);
+
+/* 时辰时段 */
+const HOUR_RANGES = {
+  '子': '23:00~01:00', '丑': '01:00~03:00', '寅': '03:00~05:00',
+  '卯': '05:00~07:00', '辰': '07:00~09:00', '巳': '09:00~11:00',
+  '午': '11:00~13:00', '未': '13:00~15:00', '申': '15:00~17:00',
+  '酉': '17:00~19:00', '戌': '19:00~21:00', '亥': '21:00~23:00',
+};
+
+/* 天干 → 方位 */
+const WEALTH_GOD  = { '甲':'东北','乙':'东北','丙':'西南','丁':'西南','戊':'正北','己':'正北','庚':'正东','辛':'正东','壬':'正南','癸':'正南' };
+const JOY_GOD     = { '甲':'东北','己':'东北','乙':'西北','庚':'西北','丙':'西南','辛':'西南','丁':'正南','壬':'正南','戊':'东南','癸':'东南' };
+const FORTUNE_GOD = { '甲':'正东','乙':'正东','丙':'正南','丁':'正南','戊':'正北','己':'正北','庚':'西南','辛':'西南','壬':'西北','癸':'西北' };
+const NOBLE_GOD   = { '甲':'西南','乙':'西南','丙':'正西','丁':'正西','戊':'东北','己':'正北','庚':'正南','辛':'东北','壬':'正东','癸':'东南' };
+
+/* 五行 → 养生器官 */
+const ORGAN_BY_ELEMENT = {
+  '木': '肝', '火': '心', '土': '胃', '金': '肺', '水': '肾',
+};
 
 const FESTIVAL_ICON_MAP = {
   '元旦': { emoji: '🎊', tone: 'tone-pink', category: 'legal' },
@@ -869,6 +992,17 @@ function safe(fn, fallback = '') { try { const v = fn(); return v == null ? fall
 function nameOf(obj, fallback = '—') { if (obj == null) return fallback; if (typeof obj === 'string') return obj; try { if (typeof obj.getName === 'function') return obj.getName(); } catch (_) {} try { return String(obj); } catch (_) { return fallback; } }
 function isSameDay(a, b) { return a && b && a.getYear() === b.getYear() && a.getMonth() === b.getMonth() && a.getDay() === b.getDay(); }
 function getToday() { const n = new Date(); return { year: n.getFullYear(), month: n.getMonth() + 1, day: n.getDate(), hour: n.getHours(), minute: n.getMinutes() }; }
+function formatHHMM(date) { return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`; }
+function getTodaySolar() { const t = getToday(); return SolarDay.fromYmd(t.year, t.month, t.day); }
+function getNowIdx() { return Math.floor(((new Date().getHours() + 1) % 24) / 2); }
+
+/** 幸运生肖：六合 + 三合 */
+function getLuckyZodiac(branch) {
+  const six = SIX_HARMONY[branch];
+  const three = THREE_HARMONY[branch] || [];
+  const all = [six, ...three].filter(Boolean);
+  return all.map(b => BRANCH_ZODIAC[b] || '').join('');
+}
 
 /* ============================================================
  * 模块 3 · 数据模型层
@@ -912,7 +1046,7 @@ const Model = {
     const key = this._dayKey(solar);
     let v = this._c.dayInfo.get(key);
     if (v) return v;
-    const lunar = solar.getLunarDay();
+    const { lunar } = this.getLunarAndCycle(solar);
     v = {
       lunar,
       holiday: solar.getLegalHoliday(),
@@ -1231,6 +1365,9 @@ const Model = {
     return v;
   },
 
+  /* ============================================================
+   * 黄历（含新增字段）
+   * ============================================================ */
   buildAlmanac(solar, hour, minute) {
     const key = `${this._dayKey(solar)}-${hour}`;
     let v = this._c.almanac.get(key);
@@ -1238,45 +1375,121 @@ const Model = {
 
     const { lunar } = this.getLunarAndCycle(solar);
     const solarTime = SolarTime.fromYmdHms(solar.getYear(), solar.getMonth(), solar.getDay(), hour, minute, 0);
-    const lunarHour = solarTime.getLunarHour();
-    const yearSC = nameOf(safe(() => solar.getSixtyCycleDay().getYear(), null));
-    const monthSC = nameOf(safe(() => solar.getSixtyCycleDay().getMonth(), null));
-    const dayPillar = nameOf(safe(() => solar.getSixtyCycleDay().getSixtyCycle(), null));
-    const zodiac = safe(() => { const eb = SixtyCycle.fromName(yearSC).getEarthBranch(); return nameOf(eb.getZodiac()); }, '');
-    const recommends = safe(() => solar.getSixtyCycleDay().getRecommends(), []) || [];
-    const avoids = safe(() => solar.getSixtyCycleDay().getAvoids(), []) || [];
-    const sound = safe(() => { const sc = solar.getSixtyCycleDay().getSixtyCycle(); return nameOf(sc.getSound()); }, '');
-    const dayBranch = safe(() => { const sc = solar.getSixtyCycleDay().getSixtyCycle(); return nameOf(sc.getEarthBranch()); }, '');
-    const clash = BRANCH_OPPOSITE[dayBranch] ? `冲${BRANCH_OPPOSITE[dayBranch]}` : '';
-    const sha = BRANCH_SHA[dayBranch] ? `煞${BRANCH_SHA[dayBranch]}` : '';
-    const dutyGod = safe(() => nameOf(lunar.getTwelveStar()), '');
+    const scDay = solar.getSixtyCycleDay();
+    const daySC = safe(() => scDay.getSixtyCycle(), null);
+    const dayPillar = nameOf(daySC, '');               // 如 "壬戌"
+    const stem = dayPillar[0] || '';
+    const branch = dayPillar[1] || '';
+
+    /* 宜忌 */
+    const recommends = safe(() => scDay.getRecommends(), []) || [];
+    const avoids     = safe(() => scDay.getAvoids(), []) || [];
+
+    /* 纳音 */
+    const sound = safe(() => nameOf(daySC.getSound()), '');
+
+    /* 冲煞 */
+    const clash = BRANCH_OPPOSITE[branch] ? `冲${BRANCH_OPPOSITE[branch]}` : '';
+    const sha   = BRANCH_SHA[branch] ? `煞${BRANCH_SHA[branch]}` : '';
+
+    /* 值神 / 黑黄道 */
+    const twelveStar = safe(() => lunar.getTwelveStar(), null);
+    const twelveStarName = twelveStar ? nameOf(twelveStar) : '—';
+    const isYellow = YELLOW_STARS.has(twelveStarName);
+    const eclipticLabel = isYellow ? '黄道' : '黑道';
+    const twelveStarValue = `${twelveStarName}（${isYellow ? '吉' : '凶'}）`;
+
+    /* 建除十二神 */
+    const duty = safe(() => nameOf(lunar.getDuty()), '');
+    const dutyLabel = duty ? `${duty}日` : '';
+
+    /* 幸运生肖 */
+    const luckyZodiac = getLuckyZodiac(branch);
+
+    /* 五行：天干五行 + 地支五行 */
+    const stemElem = STEM_ELEMENT[stem] || '';
+    const branchElem = BRANCH_ELEMENT[branch] || '';
+    const elementText = `${stem}${stemElem}${branch}${branchElem}`;
+
+    /* 胎神、廿八宿 */
+    const fetus = safe(() => nameOf(lunar.getFetusDay()), '');
+    const star28Raw = safe(() => nameOf(lunar.getTwentyEightStar()), '');
+
+    /* 廿八宿完整描述：方位 + 名称 + 五行 + 动物 */
+    const star28 = safe(() => lunar.getTwentyEightStar(), null);
+    const star28Zone = star28 ? safe(() => nameOf(star28.getZone()), '') : '';
+    const star28Elem = star28 ? safe(() => {
+      const e = star28.getElement();
+      return e ? (nameOf(e) || e) : '';
+    }, '') : '';
+    const star28Animal = star28 ? safe(() => nameOf(star28.getAnimal()), '') : '';
+    const star28Full = [
+      star28Zone,
+      `${star28Raw}${star28Elem}${star28Animal}`,
+    ].filter(Boolean).join(' ');
+
+    /* 方位神 */
+    const wealthGod  = WEALTH_GOD[stem]  || '';
+    const joyGod     = JOY_GOD[stem]     || '';
+    const fortuneGod = FORTUNE_GOD[stem] || '';
+    const nobleGod   = NOBLE_GOD[stem]   || '';
+
+    /* 彭祖百忌 */
+    const pengzuStem   = PENGZU_STEM[stem]   || '';
+    const pengzuBranch = PENGZU_BRANCH[branch] || '';
+
+    /* 十二时辰列表 */
     const hours = safe(() => lunar.getHours(), []) || [];
-    const nowH = new Date().getHours();
-    const isSelToday = isSameDay(solar, SolarDay.fromYmd(getToday().year, getToday().month, getToday().day));
-    const nowIdx = Math.floor(((nowH + 1) % 24) / 2);
+    const isSelToday = isSameDay(solar, getTodaySolar());
+    const nowIdx = getNowIdx();
     const hourList = hours.slice(0, 12).map((h, i) => {
       const gz = safe(() => nameOf(h.getSixtyCycle()), '');
+      const hStem = gz[0] || '';
+      const hBranch = gz[1] || '';
       const ts = safe(() => h.getTwelveStar(), null);
       const ecl = ts ? nameOf(safe(() => ts.getEcliptic(), '')) : '';
       const isGood = ecl === '黄道';
-      return { branch: gz[1] || '—', stem: gz[0] || '—', isGood, luck: ecl ? (isGood ? '吉' : '凶') : '', isNow: isSelToday && i === nowIdx };
+      const clashBranch = BRANCH_OPPOSITE[hBranch] || '';
+      const clashZodiac = BRANCH_ZODIAC[clashBranch] || '';
+      const clashDir    = BRANCH_SHA[hBranch] || '';
+      const branchElem  = BRANCH_ELEMENT[hBranch] || '';
+      return {
+        idx: i,
+        gz, stem: hStem, branch: hBranch,
+        isGood,
+        luck: ecl ? (isGood ? '吉' : '凶') : '',
+        isNow: isSelToday && i === nowIdx,
+        timeRange: HOUR_RANGES[hBranch] || '',
+        clashZodiac,
+        clashDir,
+        organ: ORGAN_BY_ELEMENT[branchElem] || '',
+        wealth:  WEALTH_GOD[hStem]  || '',
+        joy:     JOY_GOD[hStem]     || '',
+        fortune: FORTUNE_GOD[hStem] || '',
+        noble:   NOBLE_GOD[hStem]   || '',
+      };
     });
-    const duty = safe(() => nameOf(lunar.getDuty()), '');
-    const gods = safe(() => solar.getSixtyCycleDay().getGods(), []) || [];
-    const godsTxt = gods.slice(0, 6).map(x => nameOf(x)).join(' ') || '无';
-    const fetus = safe(() => nameOf(lunar.getFetusDay()), '');
-    const star28 = safe(() => nameOf(lunar.getTwentyEightStar()), '');
-    const stem = (dayPillar && dayPillar[0]) || '';
-    const branch = (dayPillar && dayPillar[1]) || '';
-    const pengzuStem = PENGZU_STEM[stem] || '';
-    const pengzuBranch = PENGZU_BRANCH[branch] || '';
 
     v = {
-      yearSC, monthSC, dayPillar, zodiac, recommends, avoids,
-      sound, clash, sha, dutyGod, hourList,
-      duty, godsTxt, fetus, star28,
+      yearSC: nameOf(safe(() => scDay.getYear(), null)),
+      monthSC: nameOf(safe(() => scDay.getMonth(), null)),
+      dayPillar,
+      recommends, avoids,
+      sound, clash, sha,
+      dutyGod: twelveStarName,
+      hourList,
+      duty, dutyLabel,
+      godsTxt: '',
+      fetus,
+      star28: star28Raw,
+      star28Full,
       pengzuStem, pengzuBranch,
-      weekCn: getWeekCn(solar),
+      /* 新增 */
+      eclipticLabel,
+      twelveStarValue,
+      luckyZodiac,
+      elementText,
+      wealthGod, joyGod, fortuneGod, nobleGod,
     };
     this._c.almanac.set(key, v);
     return v;
@@ -1285,8 +1498,6 @@ const Model = {
 
 /* ============================================================
  * 模块 4 · 视图渲染层
-   宽容器两列：左列 = 时间/节气/月相/节日；右列 = 日历/黄历
-   窄容器单列：按 order 排序 → 时间 → 日历 → 节气 → 月相 → 节日 → 黄历
    ============================================================ */
 const View = {
 
@@ -1306,20 +1517,19 @@ const View = {
         <div class="col-right">
           ${this.renderCalendar(state)}
           ${this.renderAlmanac(state)}
+          ${this.renderHourCard(state)}
         </div>
       </div>
     `;
   },
 
   renderHero(solar, lunar) {
-    const now = new Date();
-    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const timeStr = formatHHMM(new Date());
 
     const yearNum = solar.getYear();
     const monthNum = solar.getMonth();
     const dayNum = solar.getDay();
     const weekCn = getWeekCn(solar);
-
     const semesterText = getSemesterText(new Date(yearNum, monthNum - 1, dayNum));
 
     const lunarYear = safe(() => lunar.getLunarMonth().getLunarYear().getYear(), yearNum);
@@ -1327,21 +1537,20 @@ const View = {
     const ld = safe(() => lunar.getDay(), 0);
     const lmCn = LUNAR_MONTH_CN[lm] || '';
     const ldCn = LUNAR_DAY_CN[ld] || '';
-
     const lunarYearCn = yearToChinese(lunarYear);
 
-    const yearSC = safe(() => nameOf(solar.getSixtyCycleDay().getYear(), null), '');
+    const scDay = solar.getSixtyCycleDay();
+    const yearSC = nameOf(safe(() => scDay.getYear(), null), '');
     const zodiacCn = safe(() => {
       const eb = SixtyCycle.fromName(yearSC).getEarthBranch();
       return nameOf(eb.getZodiac());
     }, '');
     const yearSCWithZodiac = zodiacCn ? `${yearSC}${zodiacCn}` : yearSC;
 
-    const monthSC = safe(() => nameOf(solar.getSixtyCycleDay().getMonth(), null), '');
-    const daySC = safe(() => nameOf(solar.getSixtyCycleDay().getSixtyCycle(), null), '');
+    const monthSC = nameOf(safe(() => scDay.getMonth(), null), '');
+    const daySC   = nameOf(safe(() => scDay.getSixtyCycle(), null), '');
 
     const yp = Model.buildYearProgress(solar);
-
     const percentAlignClass =
       yp.percentAlign === 'left' ? 'edge-left' :
       yp.percentAlign === 'right' ? 'edge-right' : '';
@@ -1375,10 +1584,7 @@ const View = {
           </div>
 
           <div class="year-progress-footer">
-            <span>1月</span>
-            <span>4月</span>
-            <span>7月</span>
-            <span>10月</span>
+            <span>1月</span><span>4月</span><span>7月</span><span>10月</span>
           </div>
         </div>
       </div>
@@ -1429,8 +1635,6 @@ const View = {
   renderMoon(solar, lunar) {
     const phase = Model.buildPhase(solar, lunar);
 
-    const trackFillWidth = phase.fillWidth;
-
     const nodesHtml = PHASE_LIST.map((p, i) => {
       let cls;
       if (i === phase.phaseIdx) cls = 'active';
@@ -1460,7 +1664,7 @@ const View = {
         </div>
 
         <div class="moon-track">
-          <div class="moon-track-fill" style="width:${trackFillWidth}%"></div>
+          <div class="moon-track-fill" style="width:${phase.fillWidth}%"></div>
           ${nodesHtml}
         </div>
       </div>
@@ -1470,8 +1674,7 @@ const View = {
   renderFestivals(solar, state) {
     const rangeKey = state.festRange || DEFAULT_RANGE;
     const rangeOpt = RANGE_OPTIONS.find(x => x.key === rangeKey) || RANGE_OPTIONS[1];
-    const maxDays = rangeOpt.days;
-    const list = Model.buildFestivals(solar, maxDays);
+    const list = Model.buildFestivals(solar, rangeOpt.days);
 
     const isExpanded = !!state.festExpanded;
     const visibleList = isExpanded ? list : list.slice(0, COLLAPSED_COUNT);
@@ -1602,45 +1805,161 @@ const View = {
     `;
   },
 
+  /* ---------- 黄历卡：4×3 日级别网格 + 12 时辰行 ---------- */
   renderAlmanac(state) {
     const { year, month, day, hour, minute } = state;
     const solar = SolarDay.fromYmd(year, month, day);
     const al = Model.buildAlmanac(solar, hour, minute);
-    const recTxt = al.recommends.length ? al.recommends.map(x => `<span class="tag">${esc(nameOf(x))}</span>`).join('') : '<span style="color:var(--text-light)">无</span>';
-    const avoTxt = al.avoids.length ? al.avoids.map(x => `<span class="tag">${esc(nameOf(x))}</span>`).join('') : '<span style="color:var(--text-light)">无</span>';
+
+    const renderYiji = (arr) => arr.length
+      ? arr.map(x => `<span class="tag">${esc(nameOf(x))}</span>`).join('')
+      : '<span style="color:var(--text-light)">无</span>';
+
+    const nowIdx = getNowIdx();
+    const isSelToday = isSameDay(solar, getTodaySolar());
+    const selectedIdx = (state.selectedHour != null)
+      ? state.selectedHour
+      : (isSelToday ? nowIdx : 0);
+
+    const hourStrip = al.hourList.map(h => `
+      <div class="hour-chip ${h.isNow ? 'now' : ''} ${h.idx === selectedIdx ? 'selected' : ''}"
+           data-hour-idx="${h.idx}">
+        <div class="hz">${esc(h.branch)}</div>
+        <div class="gz">${esc(h.stem)}</div>
+        <div class="jl ${h.isGood ? 'y' : 'n'}">${esc(h.luck)}</div>
+      </div>
+    `).join('');
+
     return `
       <div class="card almanac-card">
         <div class="yiji-list">
-          <div class="yiji-row"><div class="yiji-icon y">宜</div><div class="yiji-body">${recTxt}</div></div>
-          <div class="yiji-row"><div class="yiji-icon j">忌</div><div class="yiji-body">${avoTxt}</div></div>
+          <div class="yiji-row"><div class="yiji-icon y">宜</div><div class="yiji-body">${renderYiji(al.recommends)}</div></div>
+          <div class="yiji-row"><div class="yiji-icon j">忌</div><div class="yiji-body">${renderYiji(al.avoids)}</div></div>
         </div>
-        <div class="triple-row">
-          <div class="triple-cell"><div class="triple-key">纳音</div><div class="triple-val">${esc(al.sound)}</div></div>
-          <div class="triple-cell"><div class="triple-key">冲煞</div><div class="triple-val red">${esc(al.clash)} ${esc(al.sha)}</div></div>
-          <div class="triple-cell"><div class="triple-key">值神</div><div class="triple-val">${esc(al.dutyGod)}</div></div>
-        </div>
-        <div class="hours-section">
-          <div class="hours-title">时辰吉凶</div>
-          <div class="hours-scroll">
-            <div class="hours-grid">
-              ${al.hourList.map(h => `
-                <div class="hour-cell ${h.isNow ? 'now' : ''}">
-                  <div class="hz">${esc(h.branch)}</div>
-                  <div class="gz">${esc(h.stem)}</div>
-                  <div class="jl ${h.isGood ? 'y' : 'n'}">${esc(h.luck)}</div>
-                </div>
-              `).join('')}
-            </div>
+
+        <div class="day-grid">
+          <!-- 第 1 行 -->
+          <div class="day-cell">
+            <div class="day-key">${esc(al.eclipticLabel)}</div>
+            <div class="day-val">${esc(al.twelveStarValue)}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">十二神</div>
+            <div class="day-val">${esc(al.dutyLabel || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">幸运生肖</div>
+            <div class="day-val">${esc(al.luckyZodiac || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">冲煞</div>
+            <div class="day-val red">${esc(al.clash)} ${esc(al.sha)}</div>
+          </div>
+
+          <!-- 第 2 行 -->
+          <div class="day-cell">
+            <div class="day-key">胎神</div>
+            <div class="day-val">${esc(al.fetus)}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">喜神</div>
+            <div class="day-val">${esc(al.joyGod || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">财神</div>
+            <div class="day-val">${esc(al.wealthGod || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">五行</div>
+            <div class="day-val">${esc(al.elementText)} <span class="dim">${esc(al.sound)}</span></div>
+          </div>
+
+          <!-- 第 3 行 -->
+          <div class="day-cell pengzu-cell">
+            <div class="day-key">彭祖</div>
+            <div class="day-val">${esc(al.pengzuStem)}${al.pengzuStem && al.pengzuBranch ? ' · ' : ''}${esc(al.pengzuBranch)}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">福神</div>
+            <div class="day-val">${esc(al.fortuneGod || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">贵神</div>
+            <div class="day-val">${esc(al.nobleGod || '—')}</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-key">廿八宿</div>
+            <div class="day-val">${esc(al.star28Full || al.star28 || '—')}</div>
           </div>
         </div>
-        <div class="quad">
-          <div class="quad-cell"><div class="quad-key">建除</div><div class="duty-big">${esc(al.duty)}</div></div>
-          <div class="quad-cell"><div class="quad-key">吉神宜趋</div><div class="quad-val">${esc(al.godsTxt)}</div></div>
-          <div class="quad-cell"><div class="quad-key">今日胎神</div><div class="quad-val">${esc(al.fetus)}</div></div>
-          <div class="quad-cell"><div class="quad-key">二十八星宿</div><div class="quad-val">${esc(al.star28)}</div></div>
-          <div class="pengzu">
-            <span class="lbl">彭祖百忌</span>
-            ${esc(al.pengzuStem)}${al.pengzuStem && al.pengzuBranch ? ' · ' : ''}${esc(al.pengzuBranch)}
+
+        <div class="hour-strip">
+          ${hourStrip}
+        </div>
+      </div>
+    `;
+  },
+
+  /* ---------- 时辰详情卡 ---------- */
+  renderHourCard(state) {
+    const { year, month, day, hour, minute } = state;
+    const solar = SolarDay.fromYmd(year, month, day);
+    const al = Model.buildAlmanac(solar, hour, minute);
+    if (!al.hourList.length) return '';
+
+    const nowIdx = getNowIdx();
+    const isSelToday = isSameDay(solar, getTodaySolar());
+    const selectedIdx = (state.selectedHour != null)
+      ? state.selectedHour
+      : (isSelToday ? nowIdx : 0);
+    const h = al.hourList[selectedIdx] || al.hourList[0];
+    if (!h) return '';
+
+    const luckCls = h.isGood ? 'luck-j' : 'luck-x';
+
+    return `
+      <div class="card hour-card">
+        <div class="hour-card-head">
+          <div class="hour-card-title">
+            <span>${esc(h.gz)}时</span>
+            <span class="hour-card-title-split"> · </span>
+            <span class="${luckCls}">${esc(h.luck || '—')}</span>
+          </div>
+          <div class="hour-card-time">${esc(h.timeRange)}</div>
+        </div>
+
+        <div class="hour-detail-grid">
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">时辰宜忌</div>
+            <div class="hour-detail-val">${esc(h.luck || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">时辰相冲</div>
+            <div class="hour-detail-val">${esc(h.clashZodiac || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">方位相冲</div>
+            <div class="hour-detail-val">${esc(h.clashDir || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">养生器官</div>
+            <div class="hour-detail-val">${esc(h.organ || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">财神</div>
+            <div class="hour-detail-val">${esc(h.wealth || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">喜神</div>
+            <div class="hour-detail-val">${esc(h.joy || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">福神</div>
+            <div class="hour-detail-val">${esc(h.fortune || '—')}</div>
+          </div>
+          <div class="hour-detail-cell">
+            <div class="hour-detail-key">阳贵</div>
+            <div class="hour-detail-val">${esc(h.noble || '—')}</div>
           </div>
         </div>
       </div>
@@ -1660,6 +1979,7 @@ const App = {
       hour: t.hour, minute: t.minute,
       festRange: DEFAULT_RANGE,
       festExpanded: false,
+      selectedHour: null,    // null = 自动使用当前时辰
     };
   })(),
 
@@ -1691,7 +2011,11 @@ const App = {
   navigate(delta) {
     if (delta === 'today') {
       const t = getToday();
-      Object.assign(this.state, { year: t.year, month: t.month, day: t.day, hour: t.hour, minute: t.minute });
+      Object.assign(this.state, {
+        year: t.year, month: t.month, day: t.day,
+        hour: t.hour, minute: t.minute,
+        selectedHour: null,
+      });
     } else if (delta === 'year-prev') {
       this.state.year -= 1;
     } else if (delta === 'year-next') {
@@ -1709,6 +2033,7 @@ const App = {
     if (this.state.day > maxDay) this.state.day = maxDay;
 
     this.state.festExpanded = false;
+    this.state.selectedHour = null;
     this.render();
   },
 
@@ -1739,18 +2064,37 @@ const App = {
         return;
       }
 
+      /* 时辰点击 → 更新 selectedHour，仅重绘两张黄历相关卡片 */
+      const hourChip = e.target.closest('[data-hour-idx]');
+      if (hourChip) {
+        this.state.selectedHour = +hourChip.dataset.hourIdx;
+        this._renderAlmanacAndHour();
+        return;
+      }
+
       const cell = e.target.closest('.cal-cell');
       if (cell && cell.dataset.y) {
-        const y = +cell.dataset.y;
-        const m = +cell.dataset.m;
-        const d = +cell.dataset.d;
-        this.state.year = y;
-        this.state.month = m;
-        this.state.day = d;
+        this.state.year = +cell.dataset.y;
+        this.state.month = +cell.dataset.m;
+        this.state.day = +cell.dataset.d;
         this.state.festExpanded = false;
+        this.state.selectedHour = null;
         this.render();
       }
     });
+  },
+
+  /* 局部重绘：黄历卡 + 时辰详情卡 */
+  _renderAlmanacAndHour() {
+    const oldAlm = this.root.querySelector('.almanac-card');
+    const oldHour = this.root.querySelector('.hour-card');
+    if (oldAlm) oldAlm.outerHTML = View.renderAlmanac(this.state);
+    if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state);
+    else if (oldAlm) {
+      // 之前无 hour-card（理论上不应该发生），补一个
+      const page = this.root.querySelector('.col-right') || this.root.querySelector('.page');
+      if (page) page.insertAdjacentHTML('beforeend', View.renderHourCard(this.state));
+    }
   },
 
   _startClock() {
@@ -1761,7 +2105,7 @@ const App = {
         this._heroEl = this.root.querySelector('#heroTime');
       }
       if (this._heroEl) {
-        const next = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const next = formatHHMM(now);
         if (this._heroEl.textContent !== next) this._heroEl.textContent = next;
       }
 
@@ -1769,7 +2113,11 @@ const App = {
       if (dayKey !== this._lastDayKey) {
         this._lastDayKey = dayKey;
         const t = getToday();
-        Object.assign(this.state, { year: t.year, month: t.month, day: t.day, hour: t.hour, minute: t.minute });
+        Object.assign(this.state, {
+          year: t.year, month: t.month, day: t.day,
+          hour: t.hour, minute: t.minute,
+          selectedHour: null,
+        });
         this.render();
       }
 
@@ -1788,7 +2136,7 @@ App.init();
 
 /* ============================================================
  * 模块 7 · 嵌入自适应（Hexo iframe 场景）
- * ============================================================ */
+   ============================================================ */
 (function tightenEmbed() {
   try {
     const fe = window.frameElement;
@@ -1798,34 +2146,19 @@ App.init();
     const csOf = (el) => parentWin.getComputedStyle(el);
 
     const resetIframe = {
-      'display': 'block',
-      'width': '100%',
-      'max-width': '100%',
-      'min-width': '0',
-      'margin': '0',
-      'padding': '0',
-      'border': '0',
-      'float': 'none',
-      'position': 'static',
-      'left': 'auto',
-      'right': 'auto',
-      'top': 'auto',
-      'transform': 'none',
-      'vertical-align': 'top',
-      'box-sizing': 'border-box',
+      'display': 'block', 'width': '100%', 'max-width': '100%', 'min-width': '0',
+      'margin': '0', 'padding': '0', 'border': '0', 'float': 'none',
+      'position': 'static', 'left': 'auto', 'right': 'auto', 'top': 'auto',
+      'transform': 'none', 'vertical-align': 'top', 'box-sizing': 'border-box',
     };
-    for (const k in resetIframe) {
-      fe.style.setProperty(k, resetIframe[k], 'important');
-    }
+    for (const k in resetIframe) fe.style.setProperty(k, resetIframe[k], 'important');
 
     const CONTENT_PAT = /tab|pane|iframe|content|article|post|entry|markdown|inner|body|main|wrapper/i;
 
     let el = fe.parentElement;
     let depth = 0;
     while (el && el.tagName !== 'HTML' && depth < 8) {
-      const cls = (
-        (typeof el.className === 'string' ? el.className : '') + ' ' + (el.id || '')
-      ).trim();
+      const cls = ((typeof el.className === 'string' ? el.className : '') + ' ' + (el.id || '')).trim();
       const cs = csOf(el);
       const isContent = CONTENT_PAT.test(cls);
 
@@ -1833,12 +2166,8 @@ App.init();
       if ((parseFloat(cs.paddingTop) || 0) > 0) el.style.setProperty('padding-top', '0', 'important');
 
       if (isContent || (cs.maxWidth && cs.maxWidth !== 'none')) {
-        if (cs.maxWidth && cs.maxWidth !== 'none') {
-          el.style.setProperty('max-width', 'none', 'important');
-        }
-        if (cs.textAlign === 'center') {
-          el.style.setProperty('text-align', 'left', 'important');
-        }
+        if (cs.maxWidth && cs.maxWidth !== 'none') el.style.setProperty('max-width', 'none', 'important');
+        if (cs.textAlign === 'center') el.style.setProperty('text-align', 'left', 'important');
 
         const pl = parseFloat(cs.paddingLeft)  || 0;
         const pr = parseFloat(cs.paddingRight) || 0;
@@ -1846,12 +2175,8 @@ App.init();
         if (pr > 0 && pr < 500) el.style.setProperty('padding-right', '0', 'important');
 
         const ml = cs.marginLeft,  mr = cs.marginRight;
-        if (ml === 'auto' || (parseFloat(ml) || 0) > 0) {
-          el.style.setProperty('margin-left',  '0', 'important');
-        }
-        if (mr === 'auto' || (parseFloat(mr) || 0) > 0) {
-          el.style.setProperty('margin-right', '0', 'important');
-        }
+        if (ml === 'auto' || (parseFloat(ml) || 0) > 0) el.style.setProperty('margin-left',  '0', 'important');
+        if (mr === 'auto' || (parseFloat(mr) || 0) > 0) el.style.setProperty('margin-right', '0', 'important');
       }
 
       el = el.parentElement;
