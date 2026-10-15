@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-15T00:24:13.640Z">
-<meta property="article:modified_time" content="2026-10-15T00:24:13.640Z">
+<meta property="article:published_time" content="2026-10-15T05:58:51.006Z">
+<meta property="article:modified_time" content="2026-10-15T05:58:51.006Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -512,7 +512,7 @@ html, body {
 .cal-cell.today .moon-dot { background: rgba(255, 255, 255, .8) !important; }
 
 /* ============================================================
-   模块 6 · 黄历详情卡（新版 4×3 网格）
+   模块 6 · 黄历详情卡（4×3 网格）
    ============================================================ */
 .almanac-card { padding: 20px 22px 20px; }
 
@@ -525,7 +525,6 @@ html, body {
 .yiji-body { flex: 1; font-size: 13.5px; color: #303640; line-height: 1.9; }
 .yiji-body .tag { display: inline-block; margin-right: 10px; white-space: nowrap; }
 
-/* 4×3 日级别信息网格 */
 .day-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -565,11 +564,22 @@ html, body {
 .day-val .emph { color: var(--red); font-weight: 600; }
 .day-val .dim { color: var(--text-sub); }
 
-/* 彭祖百忌单元格（完整内容，可换行） */
+/* 彭祖百忌单元格：每句话占一行 */
 .day-cell.pengzu-cell { text-align: left; }
-.day-cell.pengzu-cell .day-val { font-size: 12px; line-height: 1.6; text-align: left; }
+.day-cell.pengzu-cell .day-val {
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: left;
+}
+.pengzu-val {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pengzu-val > div {
+  white-space: nowrap;
+}
 
-/* 十二时辰行 */
 .hour-strip {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -588,6 +598,7 @@ html, body {
   user-select: none;
   transition: background .15s ease;
   min-width: 0;
+  position: relative;
 }
 .hour-chip:hover { background: #f7f8fa; }
 .hour-chip .hz { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -600,7 +611,7 @@ html, body {
 .hour-chip.selected { background: linear-gradient(180deg, #e9eefb, #f2f5fe); box-shadow: inset 0 0 0 2px rgba(91,114,201,.5); }
 
 /* ============================================================
-   模块 7 · 时辰详情卡（新）
+   模块 7 · 时辰详情卡
    ============================================================ */
 .hour-card { padding: 22px 22px 20px; }
 .hour-card-head { text-align: center; margin-bottom: 18px; }
@@ -631,7 +642,7 @@ html, body {
 .err { padding: 14px 18px; background: #fef2f2; color: #b91c1c; border-radius: 12px; font-size: 13px; text-align: center; max-width: 500px; margin: 40px auto; }
 
 /* ============================================================
-   响应式尺寸微调（只保留 @container，避免与 @media 重复）
+   响应式尺寸微调
    ============================================================ */
 @container (max-width: 560px) {
   .page { padding: 12px 10px 30px; }
@@ -874,7 +885,6 @@ const MOON_SEGMENTS  = PHASE_LIST.length - 1;
 
 const PHASE_EMOJI = { '新月': '🌑', '蛾眉月': '🌒', '上弦月': '🌓', '盈凸月': '🌔', '满月': '🌕', '亏凸月': '🌖', '下弦月': '🌗', '残月': '🌘' };
 
-/* 地支冲、煞方位 */
 const BRANCH_OPPOSITE = {
   '子':'午','丑':'未','寅':'申','卯':'酉','辰':'戌','巳':'亥',
   '午':'子','未':'丑','申':'寅','酉':'卯','戌':'辰','亥':'巳',
@@ -883,12 +893,10 @@ const BRANCH_SHA = {
   '申':'南','子':'南','辰':'南','寅':'北','午':'北','戌':'北',
   '巳':'东','酉':'东','丑':'东','亥':'西','卯':'西','未':'西',
 };
-/* 地支对应生肖 */
 const BRANCH_ZODIAC = {
   '子':'鼠','丑':'牛','寅':'虎','卯':'兔','辰':'龙','巳':'蛇',
   '午':'马','未':'羊','申':'猴','酉':'鸡','戌':'狗','亥':'猪',
 };
-/* 六合、三合（用于幸运生肖） */
 const SIX_HARMONY = {
   '子':'丑','丑':'子','寅':'亥','亥':'寅','卯':'戌','戌':'卯',
   '辰':'酉','酉':'辰','巳':'申','申':'巳','午':'未','未':'午',
@@ -900,10 +908,8 @@ const THREE_HARMONY = {
   '巳':['酉','丑'], '酉':['巳','丑'], '丑':['巳','酉'],
 };
 
-/* 十二神黄道集合 */
 const YELLOW_STARS = new Set(['青龙', '明堂', '金匮', '天德', '玉堂', '司命']);
 
-/* 时辰时段 */
 const HOUR_RANGES = {
   '子': '23:00~01:00', '丑': '01:00~03:00', '寅': '03:00~05:00',
   '卯': '05:00~07:00', '辰': '07:00~09:00', '巳': '09:00~11:00',
@@ -911,13 +917,11 @@ const HOUR_RANGES = {
   '酉': '17:00~19:00', '戌': '19:00~21:00', '亥': '21:00~23:00',
 };
 
-/* 天干 → 方位 */
 const WEALTH_GOD  = { '甲':'东北','乙':'东北','丙':'西南','丁':'西南','戊':'正北','己':'正北','庚':'正东','辛':'正东','壬':'正南','癸':'正南' };
 const JOY_GOD     = { '甲':'东北','己':'东北','乙':'西北','庚':'西北','丙':'西南','辛':'西南','丁':'正南','壬':'正南','戊':'东南','癸':'东南' };
 const FORTUNE_GOD = { '甲':'正东','乙':'正东','丙':'正南','丁':'正南','戊':'正北','己':'正北','庚':'西南','辛':'西南','壬':'西北','癸':'西北' };
 const NOBLE_GOD   = { '甲':'西南','乙':'西南','丙':'正西','丁':'正西','戊':'东北','己':'正北','庚':'正南','辛':'东北','壬':'正东','癸':'东南' };
 
-/* 五行 → 养生器官 */
 const ORGAN_BY_ELEMENT = {
   '木': '肝', '火': '心', '土': '胃', '金': '肺', '水': '肾',
 };
@@ -996,7 +1000,6 @@ function formatHHMM(date) { return `${String(date.getHours()).padStart(2, '0')}:
 function getTodaySolar() { const t = getToday(); return SolarDay.fromYmd(t.year, t.month, t.day); }
 function getNowIdx() { return Math.floor(((new Date().getHours() + 1) % 24) / 2); }
 
-/** 幸运生肖：六合 + 三合 */
 function getLuckyZodiac(branch) {
   const six = SIX_HARMONY[branch];
   const three = THREE_HARMONY[branch] || [];
@@ -1365,9 +1368,6 @@ const Model = {
     return v;
   },
 
-  /* ============================================================
-   * 黄历（含新增字段）
-   * ============================================================ */
   buildAlmanac(solar, hour, minute) {
     const key = `${this._dayKey(solar)}-${hour}`;
     let v = this._c.almanac.get(key);
@@ -1377,45 +1377,35 @@ const Model = {
     const solarTime = SolarTime.fromYmdHms(solar.getYear(), solar.getMonth(), solar.getDay(), hour, minute, 0);
     const scDay = solar.getSixtyCycleDay();
     const daySC = safe(() => scDay.getSixtyCycle(), null);
-    const dayPillar = nameOf(daySC, '');               // 如 "壬戌"
+    const dayPillar = nameOf(daySC, '');
     const stem = dayPillar[0] || '';
     const branch = dayPillar[1] || '';
 
-    /* 宜忌 */
     const recommends = safe(() => scDay.getRecommends(), []) || [];
     const avoids     = safe(() => scDay.getAvoids(), []) || [];
-
-    /* 纳音 */
     const sound = safe(() => nameOf(daySC.getSound()), '');
 
-    /* 冲煞 */
     const clash = BRANCH_OPPOSITE[branch] ? `冲${BRANCH_OPPOSITE[branch]}` : '';
     const sha   = BRANCH_SHA[branch] ? `煞${BRANCH_SHA[branch]}` : '';
 
-    /* 值神 / 黑黄道 */
     const twelveStar = safe(() => lunar.getTwelveStar(), null);
     const twelveStarName = twelveStar ? nameOf(twelveStar) : '—';
     const isYellow = YELLOW_STARS.has(twelveStarName);
     const eclipticLabel = isYellow ? '黄道' : '黑道';
     const twelveStarValue = `${twelveStarName}（${isYellow ? '吉' : '凶'}）`;
 
-    /* 建除十二神 */
     const duty = safe(() => nameOf(lunar.getDuty()), '');
     const dutyLabel = duty ? `${duty}日` : '';
 
-    /* 幸运生肖 */
     const luckyZodiac = getLuckyZodiac(branch);
 
-    /* 五行：天干五行 + 地支五行 */
     const stemElem = STEM_ELEMENT[stem] || '';
     const branchElem = BRANCH_ELEMENT[branch] || '';
     const elementText = `${stem}${stemElem}${branch}${branchElem}`;
 
-    /* 胎神、廿八宿 */
     const fetus = safe(() => nameOf(lunar.getFetusDay()), '');
     const star28Raw = safe(() => nameOf(lunar.getTwentyEightStar()), '');
 
-    /* 廿八宿完整描述：方位 + 名称 + 五行 + 动物 */
     const star28 = safe(() => lunar.getTwentyEightStar(), null);
     const star28Zone = star28 ? safe(() => nameOf(star28.getZone()), '') : '';
     const star28Elem = star28 ? safe(() => {
@@ -1428,17 +1418,14 @@ const Model = {
       `${star28Raw}${star28Elem}${star28Animal}`,
     ].filter(Boolean).join(' ');
 
-    /* 方位神 */
     const wealthGod  = WEALTH_GOD[stem]  || '';
     const joyGod     = JOY_GOD[stem]     || '';
     const fortuneGod = FORTUNE_GOD[stem] || '';
     const nobleGod   = NOBLE_GOD[stem]   || '';
 
-    /* 彭祖百忌 */
     const pengzuStem   = PENGZU_STEM[stem]   || '';
     const pengzuBranch = PENGZU_BRANCH[branch] || '';
 
-    /* 十二时辰列表 */
     const hours = safe(() => lunar.getHours(), []) || [];
     const isSelToday = isSameDay(solar, getTodaySolar());
     const nowIdx = getNowIdx();
@@ -1484,7 +1471,6 @@ const Model = {
       star28: star28Raw,
       star28Full,
       pengzuStem, pengzuBranch,
-      /* 新增 */
       eclipticLabel,
       twelveStarValue,
       luckyZodiac,
@@ -1805,7 +1791,7 @@ const View = {
     `;
   },
 
-  /* ---------- 黄历卡：4×3 日级别网格 + 12 时辰行 ---------- */
+  /* 彭祖百忌：天干一条 + 地支一条，各占一行 */
   renderAlmanac(state) {
     const { year, month, day, hour, minute } = state;
     const solar = SolarDay.fromYmd(year, month, day);
@@ -1829,6 +1815,12 @@ const View = {
         <div class="jl ${h.isGood ? 'y' : 'n'}">${esc(h.luck)}</div>
       </div>
     `).join('');
+
+    // 彭祖百忌：拆成两行
+    const pengzuLines = [
+      al.pengzuStem   ? `<div>${esc(al.pengzuStem)}</div>`   : '',
+      al.pengzuBranch ? `<div>${esc(al.pengzuBranch)}</div>` : '',
+    ].join('');
 
     return `
       <div class="card almanac-card">
@@ -1874,10 +1866,10 @@ const View = {
             <div class="day-val">${esc(al.elementText)} <span class="dim">${esc(al.sound)}</span></div>
           </div>
 
-          <!-- 第 3 行 -->
+          <!-- 第 3 行：彭祖百忌（每句话占一行） -->
           <div class="day-cell pengzu-cell">
-            <div class="day-key">彭祖</div>
-            <div class="day-val">${esc(al.pengzuStem)}${al.pengzuStem && al.pengzuBranch ? ' · ' : ''}${esc(al.pengzuBranch)}</div>
+            <div class="day-key">彭祖百忌</div>
+            <div class="day-val pengzu-val">${pengzuLines}</div>
           </div>
           <div class="day-cell">
             <div class="day-key">福神</div>
@@ -1900,7 +1892,6 @@ const View = {
     `;
   },
 
-  /* ---------- 时辰详情卡 ---------- */
   renderHourCard(state) {
     const { year, month, day, hour, minute } = state;
     const solar = SolarDay.fromYmd(year, month, day);
@@ -1979,7 +1970,7 @@ const App = {
       hour: t.hour, minute: t.minute,
       festRange: DEFAULT_RANGE,
       festExpanded: false,
-      selectedHour: null,    // null = 自动使用当前时辰
+      selectedHour: null,
     };
   })(),
 
@@ -2064,7 +2055,6 @@ const App = {
         return;
       }
 
-      /* 时辰点击 → 更新 selectedHour，仅重绘两张黄历相关卡片 */
       const hourChip = e.target.closest('[data-hour-idx]');
       if (hourChip) {
         this.state.selectedHour = +hourChip.dataset.hourIdx;
@@ -2084,14 +2074,12 @@ const App = {
     });
   },
 
-  /* 局部重绘：黄历卡 + 时辰详情卡 */
   _renderAlmanacAndHour() {
     const oldAlm = this.root.querySelector('.almanac-card');
     const oldHour = this.root.querySelector('.hour-card');
     if (oldAlm) oldAlm.outerHTML = View.renderAlmanac(this.state);
     if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state);
     else if (oldAlm) {
-      // 之前无 hour-card（理论上不应该发生），补一个
       const page = this.root.querySelector('.col-right') || this.root.querySelector('.page');
       if (page) page.insertAdjacentHTML('beforeend', View.renderHourCard(this.state));
     }
