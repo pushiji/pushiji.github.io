@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-16T06:47:18.572Z">
-<meta property="article:modified_time" content="2026-10-16T06:47:18.572Z">
+<meta property="article:published_time" content="2026-10-16T06:54:39.399Z">
+<meta property="article:modified_time" content="2026-10-16T06:54:39.399Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -478,7 +478,6 @@ html, body {
 .cal-cell .day-num { font-size: 19px; font-weight: 600; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -.4px; }
 .cal-cell.weekend .day-num { color: var(--red); }
 
-/* day-label 支持内部两个 span 分行/并排 */
 .cal-cell .day-label {
   display: flex;
   flex-direction: row;
@@ -512,7 +511,6 @@ html, body {
 .cal-cell.today .day-label { color: rgba(255, 255, 255, .9); }
 .cal-cell.today .day-label.term, .cal-cell.today .day-label.festival { color: #ffe4e4; }
 
-/* 班/休 徽章：贴右上角，不与数字抢占视觉重心 */
 .cal-cell .badge {
   position: absolute;
   top: 2px;
@@ -726,7 +724,13 @@ html, body {
   .cal-nav button.year-btn { font-size: 14px; }
   .cal-nav button.today-btn { padding: 0 9px; font-size: 11.5px; }
   .cal-dow { font-size: 12px; padding: 4px 0 8px; }
-  .cal-cell { min-height: 66px; padding: 6px 1px; border-radius: 10px; }
+
+  /* 手机端日历格子：顶部预留 16px 给徽章，徽章不会和数字重叠 */
+  .cal-cell {
+    min-height: 68px;
+    padding: 16px 1px 6px;
+    border-radius: 10px;
+  }
   .cal-cell .day-num { font-size: 16.5px; }
   .cal-cell .day-label {
     flex-direction: column;
@@ -740,6 +744,17 @@ html, body {
   .cal-cell .day-label .lbl-gz {
     font-size: 9.5px;
     white-space: nowrap;
+  }
+
+  /* 手机端徽章：贴到格子上方左右两侧的留白区，绝对不与数字重叠 */
+  .cal-cell .badge {
+    top: 2px;
+    right: 2px;
+    font-size: 8.5px;
+    line-height: 12px;
+    min-width: 12px;
+    padding: 0 3px;
+    border-radius: 4px;
   }
 
   .almanac-card { padding: 20px 14px; }
@@ -771,11 +786,24 @@ html, body {
   .hero-time { font-size: 48px; letter-spacing: -2px; }
   .hero-date-line { font-size: 11.5px; }
   .hero-lunar-line { font-size: clamp(9px, 3.2vw, 11.5px); }
-  .cal-cell { min-height: 58px; }
+
+  /* 极窄屏：顶部留白再小一档，徽章更紧凑 */
+  .cal-cell {
+    min-height: 60px;
+    padding: 14px 1px 4px;
+  }
   .cal-cell .day-num { font-size: 15px; }
   .cal-cell .day-label .lbl-main,
   .cal-cell .day-label .lbl-gz { font-size: 9px; }
-  .cal-cell .badge { font-size: 8.5px; line-height: 13px; min-width: 13px; top: 1px; right: 1px; }
+  .cal-cell .badge {
+    top: 1px;
+    right: 1px;
+    font-size: 8px;
+    line-height: 11px;
+    min-width: 11px;
+    padding: 0 2px;
+  }
+
   .moon-node .label { font-size: 8px; }
   .moon-node .icon { width: 20px; height: 20px; font-size: 13px; }
   .year-progress-head .yp-left { display: none; }
