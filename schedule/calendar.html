@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-15T08:54:30.834Z">
-<meta property="article:modified_time" content="2026-10-15T08:54:30.834Z">
+<meta property="article:published_time" content="2026-10-16T06:03:38.036Z">
+<meta property="article:modified_time" content="2026-10-16T06:03:38.036Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -305,7 +305,6 @@ html, body {
 .card { background: var(--card); border-radius: var(--radius-card); box-shadow: var(--shadow); overflow: hidden; width: 100%; }
 .page > .card { width: 100%; min-width: 0; }
 
-/* 卡片排序 */
 .hero-card     { order: 1; }
 .calendar-card { order: 2; }
 .term-card     { order: 3; }
@@ -321,7 +320,6 @@ html, body {
 .section-title .bar.red    { background: linear-gradient(180deg, var(--red), var(--orange)); }
 .section-title .count { margin-left: auto; font-size: 11px; color: var(--text-light); background: #f4f5f7; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: 0; }
 
-/* 容器宽 ≥ 640px 时 → 两列 */
 @container (min-width: 640px) {
   .page {
     display: grid;
@@ -482,9 +480,29 @@ html, body {
 .cal-cell.other-month { opacity: .28; pointer-events: none; }
 .cal-cell .day-num { font-size: 19px; font-weight: 600; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -.4px; }
 .cal-cell.weekend .day-num { color: var(--red); }
-.cal-cell .day-label { font-size: 10.5px; line-height: 1.2; margin-top: 6px; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 6px); text-align: center; letter-spacing: .1px; }
+
+/* day-label 支持内部两个 span 分行/并排 */
+.cal-cell .day-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-size: 10.5px;
+  line-height: 1.2;
+  margin-top: 6px;
+  color: var(--text-sub);
+  max-width: calc(100% - 4px);
+  text-align: center;
+  letter-spacing: .1px;
+}
+.cal-cell .day-label .lbl-main,
+.cal-cell .day-label .lbl-gz {
+  white-space: nowrap;
+}
 .cal-cell .day-label.term { color: var(--orange); font-weight: 500; }
 .cal-cell .day-label.festival { color: var(--red); font-weight: 500; }
+
 .cal-cell.selected:not(.today) { background: linear-gradient(135deg, #f1f4fc 0%, #e8edf9 100%); box-shadow: inset 0 0 0 1.5px rgba(91, 114, 201, .45), 0 2px 6px rgba(91, 114, 201, .08); }
 .cal-cell.selected:not(.today):hover { background: linear-gradient(135deg, #eaeefa 0%, #dee5f6 100%); }
 .cal-cell.selected:not(.today) .day-num { color: var(--blue); font-weight: 700; }
@@ -512,7 +530,7 @@ html, body {
 .cal-cell.today .moon-dot { background: rgba(255, 255, 255, .8) !important; }
 
 /* ============================================================
-   模块 6 · 黄历详情卡（4×3 网格）
+   模块 6 · 黄历详情卡
    ============================================================ */
 .almanac-card { padding: 20px 22px 20px; }
 
@@ -527,7 +545,7 @@ html, body {
 
 .day-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -537,7 +555,7 @@ html, body {
 }
 .day-cell {
   background: #fff;
-  padding: 12px 8px;
+  padding: 14px 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -546,58 +564,61 @@ html, body {
   gap: 6px;
   min-width: 0;
 }
-.day-key {
-  font-size: 11.5px;
-  color: var(--text-light);
-  letter-spacing: .5px;
-  line-height: 1.2;
-}
-.day-val {
-  font-size: 13px;
-  color: #303640;
-  font-weight: 500;
-  line-height: 1.5;
-  word-break: break-word;
-  max-width: 100%;
-}
+.day-key { font-size: 12px; color: var(--text-light); letter-spacing: .5px; line-height: 1.2; }
+.day-val { font-size: 14px; color: #303640; font-weight: 500; line-height: 1.5; word-break: break-word; max-width: 100%; }
 .day-val.red { color: var(--red); }
-.day-val .emph { color: var(--red); font-weight: 600; }
 .day-val .dim { color: var(--text-sub); }
 
-/* 彭祖百忌单元格：桌面默认两句各占一行 */
-.day-cell.pengzu-cell { text-align: left; }
-.day-cell.pengzu-cell .day-val {
-  font-size: 12px;
-  line-height: 1.6;
-  text-align: left;
-}
+.day-cell:nth-child(1)  { order: 1; }
+.day-cell:nth-child(2)  { order: 2; }
+.day-cell:nth-child(3)  { order: 3; }
+.day-cell:nth-child(4)  { order: 4; }
+.day-cell:nth-child(8)  { order: 5; }
+.day-cell:nth-child(12) { order: 6; }
+.day-cell:nth-child(5)  { order: 7; grid-column: 1 / -1; }
+.day-cell:nth-child(6)  { order: 8; }
+.day-cell:nth-child(7)  { order: 9; }
+.day-cell:nth-child(10) { order: 10; }
+.day-cell:nth-child(11) { order: 11; }
+.day-cell:nth-child(9)  { order: 12; grid-column: 1 / -1; }
+
+.day-cell.pengzu-cell .day-val { font-size: 13px; line-height: 1.5; }
 .pengzu-val {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0;
+  justify-content: center;
+  align-items: center;
 }
-.pengzu-val > div {
-  white-space: nowrap;
+.pengzu-val > div { white-space: nowrap; }
+.pengzu-val > div + div::before {
+  content: ' · ';
+  color: var(--text-sub);
+  margin: 0 3px;
 }
 
 .hour-strip {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
   border-radius: 10px;
-  overflow: hidden;
   margin-top: 12px;
 }
+.hour-strip::-webkit-scrollbar { display: none; }
 .hour-chip {
+  flex: 1 0 auto;
+  min-width: 48px;
   background: #fff;
-  padding: 10px 2px;
+  padding: 10px 4px;
   text-align: center;
   cursor: pointer;
   user-select: none;
   transition: background .15s ease;
-  min-width: 0;
   position: relative;
 }
 .hour-chip:hover { background: #f7f8fa; }
@@ -620,22 +641,11 @@ html, body {
 .hour-card-title .luck-j { color: var(--green); }
 .hour-card-time { font-size: 13px; color: var(--text-sub); margin-top: 6px; font-variant-numeric: tabular-nums; }
 
-.hour-detail-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-.hour-detail-cell {
-  background: #faf6ee;
-  border-radius: 10px;
-  padding: 12px 6px;
-  text-align: center;
-  min-width: 0;
-}
+.hour-detail-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.hour-detail-cell { background: #faf6ee; border-radius: 10px; padding: 12px 6px; text-align: center; min-width: 0; }
 .hour-detail-key { font-size: 12px; color: #4a5160; margin-bottom: 8px; line-height: 1.3; }
 .hour-detail-val { font-size: 13px; color: var(--text-sub); font-weight: 500; line-height: 1.4; word-break: break-word; }
 
-/* 加载 / 错误 */
 .loading { text-align: center; padding: 120px 20px; color: var(--text-sub); font-size: 13px; }
 .spinner { width: 26px; height: 26px; border: 3px solid #e3e6ea; border-top-color: var(--blue); border-radius: 50%; margin: 0 auto 14px; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -703,78 +713,34 @@ html, body {
   .cal-nav button.year-btn { font-size: 14px; }
   .cal-nav button.today-btn { padding: 0 9px; font-size: 11.5px; }
   .cal-dow { font-size: 12px; padding: 4px 0 8px; }
-  .cal-cell { min-height: 66px; padding: 8px 1px; border-radius: 10px; }
+  .cal-cell { min-height: 66px; padding: 6px 1px; border-radius: 10px; }
   .cal-cell .day-num { font-size: 16.5px; }
-  .cal-cell .day-label { font-size: 9.5px; margin-top: 5px; }
+  .cal-cell .day-label {
+    flex-direction: column;
+    gap: 0;
+    font-size: 9.5px;
+    margin-top: 3px;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+  .cal-cell .day-label .lbl-main,
+  .cal-cell .day-label .lbl-gz {
+    font-size: 9.5px;
+    white-space: nowrap;
+  }
 
   .almanac-card { padding: 20px 14px; }
   .yiji-body { font-size: 12.5px; }
   .yiji-body .tag { margin-right: 8px; }
 
-  /* ---------- 手机端日级别网格重排 ---------- */
-  .day-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin-top: 14px;
-  }
+  .day-grid { gap: 1px; margin-top: 14px; }
   .day-cell { padding: 10px 4px; gap: 4px; }
   .day-key { font-size: 10.5px; letter-spacing: .3px; }
   .day-val { font-size: 11.5px; line-height: 1.4; }
+  .day-cell.pengzu-cell .day-val { font-size: 11px; }
 
-  /* 重排顺序：
-     1) 喜神/财神/福神/贵神 相邻
-     2) 五行、廿八宿移到胎神上方
-     3) 彭祖百忌 跨两列放到最后（紧邻 12 时辰前）
-     —— 使用 order 属性，不改变 DOM 结构 */
-  .day-cell:nth-child(1)  { order: 1; }                       /* 黑道 */
-  .day-cell:nth-child(2)  { order: 2; }                       /* 十二神 */
-  .day-cell:nth-child(3)  { order: 3; }                       /* 幸运生肖 */
-  .day-cell:nth-child(4)  { order: 4; }                       /* 冲煞 */
-  .day-cell:nth-child(8)  { order: 5; }                       /* 五行 */
-  .day-cell:nth-child(12) { order: 6; }                       /* 廿八宿 */
-  .day-cell:nth-child(5)  { order: 7; grid-column: 1 / -1; }  /* 胎神（跨两列） */
-  .day-cell:nth-child(6)  { order: 8; }                       /* 喜神 */
-  .day-cell:nth-child(7)  { order: 9; }                       /* 财神 */
-  .day-cell:nth-child(10) { order: 10; }                      /* 福神 */
-  .day-cell:nth-child(11) { order: 11; }                      /* 贵神 */
-  .day-cell:nth-child(9)  { order: 12; grid-column: 1 / -1; } /* 彭祖百忌（跨两列，最后一行） */
-
-  /* 手机端彭祖百忌：两句合到一行 */
-  .day-cell.pengzu-cell { text-align: center; }
-  .day-cell.pengzu-cell .day-val {
-    font-size: 11px;
-    line-height: 1.5;
-    text-align: center;
-  }
-  .pengzu-val {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 0;
-    justify-content: center;
-    align-items: center;
-  }
-  .pengzu-val > div {
-    font-size: 11px;
-    white-space: nowrap;
-  }
-  /* 两句之间的分隔符 */
-  .pengzu-val > div + div::before {
-    content: ' · ';
-    color: var(--text-sub);
-    margin: 0 2px;
-  }
-
-  /* ---------- 12 时辰：一行显示，不够则横向滚动 ---------- */
-  .hour-strip {
-    display: flex;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    gap: 1px;
-    margin-top: 10px;
-  }
-  .hour-strip::-webkit-scrollbar { display: none; }
-  .hour-chip { flex: 1 0 auto; min-width: 44px; padding: 8px 4px; }
+  .hour-strip { margin-top: 10px; }
+  .hour-chip { min-width: 44px; padding: 8px 4px; }
   .hour-chip .hz { font-size: 12.5px; }
   .hour-chip .gz { font-size: 10px; margin: 2px 0; }
   .hour-chip .jl { font-size: 10.5px; }
@@ -794,7 +760,8 @@ html, body {
   .hero-lunar-line { font-size: clamp(9px, 3.2vw, 11.5px); }
   .cal-cell { min-height: 58px; }
   .cal-cell .day-num { font-size: 15px; }
-  .cal-cell .day-label { font-size: 9px; }
+  .cal-cell .day-label .lbl-main,
+  .cal-cell .day-label .lbl-gz { font-size: 9px; }
   .cal-cell .badge { font-size: 8.5px; line-height: 13px; min-width: 13px; top: 3px; right: 3px; }
   .moon-node .label { font-size: 8px; }
   .moon-node .icon { width: 20px; height: 20px; font-size: 13px; }
@@ -805,19 +772,14 @@ html, body {
 
 @container (max-width: 320px) {
   .hero-time { font-size: 44px; letter-spacing: -2px; margin-bottom: 14px; }
-  .hero-date-line { font-size: 12px; }
   .hero-lunar-line { font-size: clamp(9px, 3vw, 11px); }
   .hero-card { padding: 20px 16px 16px; }
   .term-card, .moon-card, .festival-card { padding-left: 16px; padding-right: 16px; }
-  .term-name { font-size: 17px; }
   .moon-visual { flex: 0 0 60px; height: 60px; font-size: 34px; }
   .moon-name { font-size: 17px; }
-  .moon-node .icon { width: 22px; height: 22px; font-size: 14px; }
-  .moon-node .label { font-size: 9px; }
   .fest-icon { flex: 0 0 34px; height: 34px; font-size: 17px; border-radius: 10px; }
   .fest-name { font-size: 13.5px; }
   .fest-days { font-size: 14px; }
-  .year-progress-head .yp-left { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -971,9 +933,7 @@ const JOY_GOD     = { '甲':'东北','己':'东北','乙':'西北','庚':'西北
 const FORTUNE_GOD = { '甲':'正东','乙':'正东','丙':'正南','丁':'正南','戊':'正北','己':'正北','庚':'西南','辛':'西南','壬':'西北','癸':'西北' };
 const NOBLE_GOD   = { '甲':'西南','乙':'西南','丙':'正西','丁':'正西','戊':'东北','己':'正北','庚':'正南','辛':'东北','壬':'正东','癸':'东南' };
 
-const ORGAN_BY_ELEMENT = {
-  '木': '肝', '火': '心', '土': '胃', '金': '肺', '水': '肾',
-};
+const ORGAN_BY_ELEMENT = { '木': '肝', '火': '心', '土': '胃', '金': '肺', '水': '肾' };
 
 const FESTIVAL_ICON_MAP = {
   '元旦': { emoji: '🎊', tone: 'tone-pink', category: 'legal' },
@@ -1054,6 +1014,12 @@ function getLuckyZodiac(branch) {
   const three = THREE_HARMONY[branch] || [];
   const all = [six, ...three].filter(Boolean);
   return all.map(b => BRANCH_ZODIAC[b] || '').join('');
+}
+
+function getSelectedHourIdx(state, solar) {
+  if (state.selectedHour != null) return state.selectedHour;
+  const isSelToday = isSameDay(solar, getTodaySolar());
+  return isSelToday ? getNowIdx() : 0;
 }
 
 /* ============================================================
@@ -1143,7 +1109,8 @@ const Model = {
       isTermDay = td.getYear() === solar.getYear() && td.getMonth() === solar.getMonth() && td.getDay() === solar.getDay();
     }
 
-    let label = '', labelType = 'lunar';
+    /* label = 主文本（农历日、节日、节气、月份）；gzLabel = 干支（仅在普通农历日时非空） */
+    let label = '', labelType = 'lunar', gzLabel = '';
     if (lunarFest) { label = lunarFest.getName(); labelType = 'festival'; }
     else if (solarFest) { label = solarFest.getName(); labelType = 'festival'; }
     else if (isTermDay) { label = term.getName(); labelType = 'term'; }
@@ -1153,7 +1120,8 @@ const Model = {
       if (lm.getMonthWithLeap() === 1) label = lm.getLunarYear().getSixtyCycle().getName() + '年' + label;
       labelType = 'month';
     } else {
-      label = lunar.getName() + lunar.getSixtyCycle().getName();
+      label = lunar.getName();
+      gzLabel = lunar.getSixtyCycle().getName();
     }
 
     const isMoonDay = phaseDay && phaseDay.getDayIndex() === 0;
@@ -1162,7 +1130,7 @@ const Model = {
     return {
       solar, dayNum: solar.getDay(),
       isCurrentMonth, isToday, isSelected, isWeekend,
-      label, labelType,
+      label, labelType, gzLabel,
       holiday: holiday ? { isWork: holiday.isWork() } : null,
       isMoonDay, moonIndex,
     };
@@ -1422,9 +1390,9 @@ const Model = {
     let v = this._c.almanac.get(key);
     if (v) return v;
 
-    const { lunar } = this.getLunarAndCycle(solar);
-    const solarTime = SolarTime.fromYmdHms(solar.getYear(), solar.getMonth(), solar.getDay(), hour, minute, 0);
-    const scDay = solar.getSixtyCycleDay();
+    const { lunar, cycle } = this.getLunarAndCycle(solar);
+    const scDay = cycle || solar.getSixtyCycleDay();
+
     const daySC = safe(() => scDay.getSixtyCycle(), null);
     const dayPillar = nameOf(daySC, '');
     const stem = dayPillar[0] || '';
@@ -1539,26 +1507,27 @@ const View = {
   render(state) {
     const { year, month, day } = state;
     const solar = SolarDay.fromYmd(year, month, day);
-    const { lunar } = Model.getLunarAndCycle(solar);
+    const { lunar, cycle } = Model.getLunarAndCycle(solar);
+    const al = Model.buildAlmanac(solar, state.hour, state.minute);
 
     return `
       <div class="page">
         <div class="col-left">
-          ${this.renderHero(solar, lunar)}
+          ${this.renderHero(solar, lunar, cycle)}
           ${this.renderTerm(solar)}
           ${this.renderMoon(solar, lunar)}
           ${this.renderFestivals(solar, state)}
         </div>
         <div class="col-right">
           ${this.renderCalendar(state)}
-          ${this.renderAlmanac(state)}
-          ${this.renderHourCard(state)}
+          ${this.renderAlmanac(state, al)}
+          ${this.renderHourCard(state, al)}
         </div>
       </div>
     `;
   },
 
-  renderHero(solar, lunar) {
+  renderHero(solar, lunar, cycle) {
     const timeStr = formatHHMM(new Date());
 
     const yearNum = solar.getYear();
@@ -1574,7 +1543,7 @@ const View = {
     const ldCn = LUNAR_DAY_CN[ld] || '';
     const lunarYearCn = yearToChinese(lunarYear);
 
-    const scDay = solar.getSixtyCycleDay();
+    const scDay = cycle || solar.getSixtyCycleDay();
     const yearSC = nameOf(safe(() => scDay.getYear(), null), '');
     const zodiacCn = safe(() => {
       const eb = SixtyCycle.fromName(yearSC).getEarthBranch();
@@ -1830,30 +1799,30 @@ const View = {
     const moonDot = cell.isMoonDay ? `<span class="moon-dot moon-${cell.moonIndex}"></span>` : '';
     const labelCls = cell.labelType === 'term' ? 'term' : cell.labelType === 'festival' ? 'festival' : '';
     const s = cell.solar;
+
+    /* 农历主文本 + 干支分成两个 span，方便移动端分行 */
+    const gzHtml = cell.gzLabel ? `<span class="lbl-gz">${esc(cell.gzLabel)}</span>` : '';
+
     return `
       <div class="${classes.join(' ')}" data-y="${s.getYear()}" data-m="${s.getMonth()}" data-d="${s.getDay()}">
         ${badge}
         <div class="day-num">${cell.dayNum}</div>
-        <div class="day-label ${labelCls}">${esc(cell.label)}</div>
+        <div class="day-label ${labelCls}"><span class="lbl-main">${esc(cell.label)}</span>${gzHtml}</div>
         ${moonDot}
       </div>
     `;
   },
 
-  renderAlmanac(state) {
-    const { year, month, day, hour, minute } = state;
+  renderAlmanac(state, al) {
+    const { year, month, day } = state;
     const solar = SolarDay.fromYmd(year, month, day);
-    const al = Model.buildAlmanac(solar, hour, minute);
+    al = al || Model.buildAlmanac(solar, state.hour, state.minute);
 
     const renderYiji = (arr) => arr.length
       ? arr.map(x => `<span class="tag">${esc(nameOf(x))}</span>`).join('')
       : '<span style="color:var(--text-light)">无</span>';
 
-    const nowIdx = getNowIdx();
-    const isSelToday = isSameDay(solar, getTodaySolar());
-    const selectedIdx = (state.selectedHour != null)
-      ? state.selectedHour
-      : (isSelToday ? nowIdx : 0);
+    const selectedIdx = getSelectedHourIdx(state, solar);
 
     const hourStrip = al.hourList.map(h => `
       <div class="hour-chip ${h.isNow ? 'now' : ''} ${h.idx === selectedIdx ? 'selected' : ''}"
@@ -1936,17 +1905,13 @@ const View = {
     `;
   },
 
-  renderHourCard(state) {
-    const { year, month, day, hour, minute } = state;
+  renderHourCard(state, al) {
+    const { year, month, day } = state;
     const solar = SolarDay.fromYmd(year, month, day);
-    const al = Model.buildAlmanac(solar, hour, minute);
+    al = al || Model.buildAlmanac(solar, state.hour, state.minute);
     if (!al.hourList.length) return '';
 
-    const nowIdx = getNowIdx();
-    const isSelToday = isSameDay(solar, getTodaySolar());
-    const selectedIdx = (state.selectedHour != null)
-      ? state.selectedHour
-      : (isSelToday ? nowIdx : 0);
+    const selectedIdx = getSelectedHourIdx(state, solar);
     const h = al.hourList[selectedIdx] || al.hourList[0];
     if (!h) return '';
 
@@ -2077,9 +2042,7 @@ const App = {
       const navBtn = e.target.closest('[data-nav]');
       if (navBtn) {
         const v = navBtn.dataset.nav;
-        if (v === 'today') this.navigate('today');
-        else if (v === 'year-prev') this.navigate('year-prev');
-        else if (v === 'year-next') this.navigate('year-next');
+        if (v === 'today' || v === 'year-prev' || v === 'year-next') this.navigate(v);
         else this.navigate(+v);
         return;
       }
@@ -2099,9 +2062,6 @@ const App = {
         return;
       }
 
-      /* 点击时辰：
-         1) 切换 .selected 类（不重建 DOM，避免 12 时辰行滚动位置被重置）
-         2) 只重建时辰详情卡 */
       const hourChip = e.target.closest('[data-hour-idx]');
       if (hourChip) {
         const idx = +hourChip.dataset.hourIdx;
@@ -2109,8 +2069,10 @@ const App = {
         this.root.querySelectorAll('.hour-chip').forEach(chip => {
           chip.classList.toggle('selected', +chip.dataset.hourIdx === idx);
         });
+        const solar = SolarDay.fromYmd(this.state.year, this.state.month, this.state.day);
+        const al = Model.buildAlmanac(solar, this.state.hour, this.state.minute);
         const oldHour = this.root.querySelector('.hour-card');
-        if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state);
+        if (oldHour) oldHour.outerHTML = View.renderHourCard(this.state, al);
         return;
       }
 
