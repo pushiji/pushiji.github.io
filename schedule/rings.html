@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="年轮 · 1985.1.26    *{box-sizing:border-box;}   html,body{margin:0;padding:0;}    #stage-wrap {     width:100%;     min-height:100vh;     min-height:100dvh;     display:flex;     align-items:center">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-16T07:14:16.713Z">
-<meta property="article:modified_time" content="2026-10-16T07:14:16.713Z">
+<meta property="article:published_time" content="2026-10-16T07:21:28.320Z">
+<meta property="article:modified_time" content="2026-10-16T07:21:28.320Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -274,59 +274,53 @@
     transition:background 1.6s ease;
   }
 
+  /* #stage 尺寸由 JS 强制写入 inline style，CSS 只做兜底 */
   #stage{
     position:relative;
-    width:100%;
-    max-width:96vh;
-    max-width:96dvh;
+    display:block;
+    width:min(96vw, 82dvh);
     aspect-ratio:1/1;
     margin:0 auto;
+    overflow:hidden;
   }
 
   #cv{
     display:block;
     width:100% !important;
     height:100% !important;
+    margin:0;
+    padding:0;
+    border:0;
     cursor:crosshair;
-    aspect-ratio:1/1;
     touch-action:none;
   }
 
-  /* ============ 文字区：径向羽化暗底，视觉上像圆盘自然暗下去 ============ */
   .footer{
     position:absolute;
     left:50%;
-    bottom:2.2%;
+    bottom:2%;
     transform:translateX(-50%);
     text-align:center;
     pointer-events:none;
     z-index:6;
-    width:96%;
-    padding:14px 24px 16px;
-    border-radius:20px;
-    background:radial-gradient(ellipse 100% 100% at 50% 50%,
-      rgba(4,2,0,.86) 0%,
-      rgba(4,2,0,.72) 45%,
-      rgba(4,2,0,.38) 72%,
-      rgba(4,2,0,.10) 88%,
-      rgba(4,2,0,0)   100%);
-    transition:color 1.6s;
+    width:94%;
   }
 
   .meta{
     font-size:clamp(10px,.92vw,12.5px);
     letter-spacing:.18em;
-    color:rgba(255,222,186,.96);
+    color:rgba(255,224,190,.98);
     text-shadow:
-      0 1px 3px rgba(0,0,0,.98),
-      0 0 10px rgba(0,0,0,.9),
-      0 0 22px rgba(0,0,0,.75);
+      0 1px 3px rgba(0,0,0,1),
+      0 0 8px rgba(0,0,0,.98),
+      0 0 18px rgba(0,0,0,.9),
+      0 0 30px rgba(0,0,0,.7);
     transition:color 1.6s;
     white-space:nowrap;
   }
 
-  .meta .sep{margin:0 .7em;opacity:.42;}
-  .meta b{font-weight:600;color:hsla(32,88%,84%,.98);}
+  .meta .sep{margin:0 .7em;opacity:.45;}
+  .meta b{font-weight:600;color:hsla(32,88%,84%,1);}
 
   .plabel{
     position:absolute;
@@ -360,15 +354,15 @@
     margin-top:5px;
     font-size:clamp(9px,.88vw,11px);
     letter-spacing:.22em;
-    color:rgba(255,232,200,.66);
+    color:rgba(255,232,200,.68);
     line-height:1;
   }
 
   .themes{
     position:absolute;
-    bottom:14px;right:16px;
+    bottom:12px;right:14px;
     display:flex;gap:10px;z-index:20;
-    opacity:.32;
+    opacity:.34;
     transition:opacity .4s;
   }
 
@@ -390,11 +384,6 @@
   .themes button.on{opacity:1;transform:scale(1.3);}
 
   @media (max-width:640px){
-    .footer{
-      bottom:1.8%;
-      width:98%;
-      padding:12px 14px 14px;
-    }
     .meta{
       white-space:normal;
       line-height:1.9;
@@ -408,7 +397,7 @@
     .plabel .yr{font-size:15px;}
     .plabel .dt{font-size:9px;letter-spacing:.18em;margin-top:4px;}
 
-    .themes{bottom:10px;right:10px;gap:12px;}
+    .themes{bottom:10px;right:10px;gap:13px;}
     .themes button{width:11px;height:11px;}
   }
 </style>
@@ -626,7 +615,7 @@
   function applyTheme(key) {
     TH = THEMES[key];
     stageWrap.style.background = TH.bg;
-    meta.style.color = `hsla(${TH.hue0 + 4},42%,82%,.95)`;
+    meta.style.color = `hsla(${TH.hue0 + 4},42%,82%,.98)`;
     Array.prototype.forEach.call(themesEl.children, function (b) {
       b.classList.toggle('on', b.dataset.k === key);
     });
@@ -644,22 +633,48 @@
     themesEl.appendChild(b);
   });
 
-  /* ============ 布局完全恢复原版：圆盘参数、位置、尺寸都不变 ============ */
+  /* ============ 强制正方形 + 移动端圆盘微调 ============ */
   function layout() {
-    const rect = stage.getBoundingClientRect();
-    W = rect.width;
-    H = rect.height;
-    if (W < 10 || H < 10) return;
+    const wrapRect = stageWrap.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
+    // 可用宽度取容器宽度与视口宽度的较小值（防止主题给容器加内边距撑宽）
+    const availW = Math.max(200, Math.min(wrapRect.width || vw, vw));
+    // 可用高度取视口高度，正方形最多占 86%，剩下给上下留白
+    const availH = Math.max(200, vh);
+
+    const size = Math.floor(Math.min(availW * 0.98, availH * 0.86));
+    if (size < 80) return;
+
+    // 关键：inline style + !important，任何主题都覆盖不掉
+    stage.style.setProperty('width',     size + 'px', 'important');
+    stage.style.setProperty('height',    size + 'px', 'important');
+    stage.style.setProperty('max-width', size + 'px', 'important');
+    stage.style.setProperty('max-height',size + 'px', 'important');
+    stage.style.setProperty('aspect-ratio','auto',    'important');
+
+    W = size; H = size;
     DPR = Math.min(window.devicePixelRatio || 1, 2);
+
     cv.width  = Math.round(W * DPR);
     cv.height = Math.round(H * DPR);
-    cv.style.width  = W + 'px';
-    cv.style.height = H + 'px';
+    cv.style.setProperty('width',  W + 'px', 'important');
+    cv.style.setProperty('height', H + 'px', 'important');
 
-    cx = W / 2;
-    cy = H / 2 - H * 0.028;                 /* 原版：中心略偏上 */
-    maxR   = Math.min(W, H) * 0.46;         /* 原版：0.46 */
+    const isNarrow = size < 480;
+
+    // 窄屏：圆盘略缩、中心略上移，给底部文字留干净空间
+    // 宽屏：完全保持原版参数
+    if (isNarrow) {
+      cx = W / 2;
+      cy = H * 0.435;
+      maxR = Math.min(W, H) * 0.40;
+    } else {
+      cx = W / 2;
+      cy = H / 2 - H * 0.028;
+      maxR = Math.min(W, H) * 0.46;
+    }
     innerR = Math.max(10, maxR * 0.045);
 
     const k = (maxR - innerR) / totalW;
@@ -668,6 +683,7 @@
     for (let i = 0; i < N; i++) { r += rawW[i] * k; radii.push(r); }
 
     buildOffscreen();
+    labelDirty = true;
   }
 
   function buildOffscreen() {
@@ -1009,7 +1025,6 @@
     ctx.restore();
   }
 
-  /* ============ 标签定位：限制在 stage 内，触屏跟随手指上方 ============ */
   function placeLabel() {
     const pad = 8;
     const w = plabel.offsetWidth  || 90;
@@ -1174,12 +1189,13 @@
   }
 
   if (window.ResizeObserver) {
-    new ResizeObserver(scheduleLayout).observe(stage);
+    new ResizeObserver(scheduleLayout).observe(stageWrap);
   }
   window.addEventListener('resize', scheduleLayout, { passive: true });
   window.addEventListener('orientationchange', scheduleLayout, { passive: true });
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', scheduleLayout, { passive: true });
+    window.visualViewport.addEventListener('scroll', scheduleLayout, { passive: true });
   }
 
   layout();
@@ -1187,6 +1203,7 @@
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(scheduleLayout);
   }
+  setTimeout(scheduleLayout, 300);
   requestAnimationFrame(frame);
 })();
 </script>
