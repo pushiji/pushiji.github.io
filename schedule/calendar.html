@@ -26,8 +26,8 @@
 <meta property="og:site_name" content="吉度奇点">
 <meta property="og:description" content="吉度日历  :root {   --bg: #eef0f3;   --card: #ffffff;   --text: #1a1d24;   --text-sub: #7a8290;   --text-light: #b8bec7;   --red: #d94a4a;   --red-soft: #fdf0f0;   --orange: #e08a3a;   --orange-soft">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-10-16T07:03:33.353Z">
-<meta property="article:modified_time" content="2026-10-16T07:03:33.353Z">
+<meta property="article:published_time" content="2026-10-17T03:45:58.356Z">
+<meta property="article:modified_time" content="2026-10-17T03:45:58.356Z">
 <meta property="article:author" content="PuShiji">
 <meta name="twitter:card" content="summary">
 
@@ -334,8 +334,36 @@ html, body {
    ============================================================ */
 .hero-card { padding: 36px 24px 24px; background: #ffffff; text-align: center; position: relative; }
 .hero-time { font-size: 68px; font-weight: 700; line-height: 1; letter-spacing: -4px; color: #1a1d24; font-variant-numeric: tabular-nums; margin-bottom: 22px; }
-.hero-date-line { font-size: 13.5px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.6; font-variant-numeric: tabular-nums; margin-bottom: 6px; word-break: break-word; }
-.hero-lunar-line { font-size: 13.5px; font-weight: 700; color: var(--red); letter-spacing: .3px; line-height: 1.6; font-variant-numeric: tabular-nums; word-break: break-word; margin-bottom: 20px; }
+
+/* 使用 flex 居中，避免文本在 nowrap 下的偏移 bug */
+.hero-date-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: .3px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 6px;
+  word-break: break-word;
+}
+.hero-lunar-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: .3px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+  margin-bottom: 20px;
+}
 
 .year-progress { text-align: left; padding-top: 16px; border-top: 1px dashed var(--line-dark); }
 .year-progress-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; gap: 10px; min-height: 18px; }
@@ -665,6 +693,7 @@ html, body {
   .page { padding: 12px 10px 30px; }
   .hero-card { padding: 28px 18px 20px; }
   .hero-time { font-size: 56px; letter-spacing: -3px; margin-bottom: 18px; }
+  
   .hero-date-line { font-size: 12.5px; letter-spacing: .2px; }
   .hero-lunar-line {
     font-size: clamp(10px, 3.4vw, 12.5px);
